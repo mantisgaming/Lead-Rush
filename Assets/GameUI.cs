@@ -1,0 +1,315 @@
+using Demo.Scripts.Runtime;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class GameUI : MonoBehaviour
+{
+
+    public Image highAlertTop;
+    public Image highAlertBottom;
+    public Image highAlertLeft;
+    public Image highAlertRight;
+
+    public Image hitMarkerImage;
+
+    public TMPro.TMP_Text ammoText;
+    public TMPro.TMP_Text healthText;
+    public TMPro.TMP_Text scoreText;
+    public TMPro.TMP_Text durationText;
+
+    public TMPro.TMP_Text killsText;
+    public TMPro.TMP_Text deathsText;
+
+    public TMPro.TMP_Text roundText;
+
+    public GameObject player;
+
+    public RoundManager roundManager;
+
+    public EnemyManager enemyManager;
+
+    bool highAlertBlinkOn;
+
+    float highAlertBlinkerValue;
+
+    public AudioClip beepSFX;
+
+    bool beeperFuse;
+
+    public GameObject readyText;
+
+    public GameObject qoeSliderGO;
+    public Slider qoeSlider;
+    public TMPro.TMP_Text sliderText;
+    public GameObject qoeSubmitGO;
+
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        beeperFuse = true;
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        UpdateHitMarker();
+
+        UpdateUITexts();
+
+        UpdateHighAlert();
+    }
+
+    void UpdateHighAlert() {
+
+        GameObject enemy = enemyManager.GetClosestEnemy();
+
+        if(player.GetComponent<FPSController>().deathTimeOut>0)
+        {
+            highAlertTop.gameObject.SetActive(true);
+            highAlertBottom.gameObject.SetActive(true);
+            highAlertLeft.gameObject.SetActive(true);
+            highAlertRight.gameObject.SetActive(true);
+
+            float distance = player.GetComponent<FPSController>().deathTimeOut;
+
+            highAlertTop.rectTransform.localScale = new Vector3(distance, 1, 1f);
+            highAlertBottom.rectTransform.localScale = new Vector3(distance, 1, 1);
+            highAlertLeft.rectTransform.localScale = new Vector3(distance, 1, 1);
+            highAlertRight.rectTransform.localScale = new Vector3(distance, 1, 1);
+
+            highAlertTop.color = new Color(1, 0, 0, 1);
+            highAlertBottom.color = new Color(1, 0, 0, 1);
+            highAlertLeft.color = new Color(1, 0, 0, 1);
+            highAlertRight.color = new Color(1, 0, 0, 1);
+        }
+
+
+        else if (enemy != null)
+        {
+
+            var relativePoint = player.transform.InverseTransformPoint(enemy.transform.position);
+
+            float distance = Vector3.Distance(player.transform.position, enemy.transform.position);
+
+            SetHighAlertAlpha(distance / 2, 0 , enemy.GetComponent<AudioSource>());
+
+
+            if (relativePoint.x < 0.0 && relativePoint.z > 0.0) // Front left
+            {
+                if (Math.Abs(relativePoint.x) > Math.Abs(relativePoint.z))
+                {
+                    highAlertLeft.gameObject.SetActive(true);
+                    highAlertTop.gameObject.SetActive(false);
+                }
+                else
+                {
+                    highAlertLeft.gameObject.SetActive(false);
+                    highAlertTop.gameObject.SetActive(true);
+                }
+
+                highAlertBottom.gameObject.SetActive(false);
+                highAlertRight.gameObject.SetActive(false);
+            }
+            else if (relativePoint.x > 0.0 && relativePoint.z > 0.0) // front right
+            {
+                if (Math.Abs(relativePoint.x) > Math.Abs(relativePoint.z))
+                {
+                    highAlertRight.gameObject.SetActive(true);
+                    highAlertTop.gameObject.SetActive(false);
+                }
+                else
+                {
+                    highAlertRight.gameObject.SetActive(false);
+                    highAlertTop.gameObject.SetActive(true);
+                }
+
+                highAlertLeft.gameObject.SetActive(false);
+                highAlertBottom.gameObject.SetActive(false);
+            }
+
+            else if (relativePoint.x < 0.0 && relativePoint.z < 0.0) // Back left
+            {
+
+                if (Math.Abs(relativePoint.x) > Math.Abs(relativePoint.z))
+                {
+                    highAlertLeft.gameObject.SetActive(true);
+                    highAlertBottom.gameObject.SetActive(false);
+                }
+                else
+                {
+                    highAlertLeft.gameObject.SetActive(false);
+                    highAlertBottom.gameObject.SetActive(true);
+                }
+
+                highAlertTop.gameObject.SetActive(false);
+                highAlertRight.gameObject.SetActive(false);
+            }
+            else if (relativePoint.x > 0.0 && relativePoint.z < 0.0) // Back right
+            {
+                if (Math.Abs(relativePoint.x) > Math.Abs(relativePoint.z))
+                {
+                    highAlertRight.gameObject.SetActive(true);
+                    highAlertBottom.gameObject.SetActive(false);
+                }
+                else
+                {
+                    highAlertRight.gameObject.SetActive(false);
+                    highAlertBottom.gameObject.SetActive(true);
+                }
+
+                highAlertLeft.gameObject.SetActive(false);
+                highAlertTop.gameObject.SetActive(false);
+
+            }
+        }
+        else
+        {
+            highAlertTop.gameObject.SetActive(false);
+            highAlertBottom.gameObject.SetActive(false);
+            highAlertLeft.gameObject.SetActive(false);
+            highAlertRight.gameObject.SetActive(false);
+        }
+    }
+    void UpdateUITexts()
+    {
+        ammoText.text = "" + player.GetComponent<FPSController>().GetGun().currentAmmoCount;
+        healthText.text = "      " + player.GetComponent<PlayerStats>().currentHealth;
+        scoreText.text = "Score: " + player.GetComponent<FPSController>().score;
+        durationText.text = "Duration: " + roundManager.roundTimer.ToString("#.#");
+
+        killsText.text = "Kills: " + player.GetComponent<FPSController>().roundKills;
+        deathsText.text = "Deaths: " + player.GetComponent<FPSController>().roundDeaths;
+
+        if (roundManager.currentRoundNumber <= roundManager.totalRoundNumber)
+            roundText.text = "Round\n " + roundManager.currentRoundNumber + "/" + roundManager.totalRoundNumber;
+        else
+            roundText.text = "Thank You!";
+
+        if (!player.GetComponent<FPSController>().isPlayerReady)
+            readyText.SetActive(true);
+        else
+            readyText.SetActive(false);
+
+        qoeSliderGO.gameObject.SetActive(!player.GetComponent<FPSController>().isQoeDisabled);
+
+        if (qoeSliderGO.activeSelf)
+        {
+            sliderText.text = qoeSlider.value.ToString("#.#");
+            if (qoeSlider.value != 3.000f)
+                qoeSubmitGO.SetActive(true);
+            else
+                qoeSubmitGO.SetActive(false);
+        }
+    }
+
+    void UpdateHitMarker()
+    {
+        if (player.GetComponent<FPSController>().killCooldown > 0)
+        {
+            hitMarkerImage.color = new Color(1, 0, 0, 1);
+        }
+        else if (player.GetComponent<FPSController>().headshotCooldown > 0)
+        {
+            hitMarkerImage.color = new Color(1, 1, 0, 1);
+        }
+        else if (player.GetComponent<FPSController>().regularHitCooldown > 0)
+        {
+            hitMarkerImage.color = new Color(1, 1, 1, 1);
+        }
+        else
+        {
+            hitMarkerImage.color = new Color(0, 0, 0, 0);
+        }
+    }
+
+    void SetHighAlertAlpha(float distance, float takehitTimer,AudioSource source)
+    {
+        if (distance == 0)
+            return;
+
+        float green = 1 / (distance / 10);
+
+        if (takehitTimer > 0)
+        {
+            green = 0;
+        }
+
+        float red = 1 / (distance / 10);
+
+        float blue = 0;
+        float alpha = 1 / (distance / 10);
+
+        highAlertTop.rectTransform.localScale = new Vector3(1 / ((distance / 5) + 1), 1, 0.9f);
+        highAlertBottom.rectTransform.localScale = new Vector3(1 / (((distance / 5) + 0.9f)), 1, 1);
+        highAlertLeft.rectTransform.localScale = new Vector3(1 / (((distance / 5) + 0.9f)), 1, 1);
+        highAlertRight.rectTransform.localScale = new Vector3(1 / (((distance / 5) + 0.9f)), 1, 1);
+
+        /*highAlertTop.color = new Color(red, green, blue, alpha);
+        highAlertBottom.color = new Color(red, green, blue, alpha);
+        highAlertLeft.color = new Color(red, green, blue, alpha);
+        highAlertRight.color = new Color(red, green, blue, alpha);*/
+
+        if (!highAlertBlinkOn)
+        { 
+            highAlertTop.color = new Color(red, 33, blue, 0);
+            highAlertBottom.color = new Color(red, 33, blue, 0);
+            highAlertLeft.color = new Color(red, 33, blue, 0);
+            highAlertRight.color = new Color(red, 33, blue, 0);
+            beeperFuse = true;
+        }
+        else
+        {
+            if (beeperFuse)
+            {
+                PlayBeepSFX(source);
+                beeperFuse = false;
+            }
+
+            highAlertTop.color = new Color(red, green, blue, alpha);
+            highAlertBottom.color = new Color(red, green, blue, alpha);
+            highAlertLeft.color = new Color(red, green, blue, alpha);
+            highAlertRight.color = new Color(red, green, blue, alpha);
+        }
+
+
+
+        highAlertBlinkerValue = Mathf.PingPong(Time.time, (distance / 5 + 0.1f));
+
+        //Debug.Log("blink:"+highAlertBlinkerValue);
+
+        if (highAlertBlinkerValue > (distance / 10 + .05f))
+            highAlertBlinkOn = true;
+        else highAlertBlinkOn = false;
+    }
+
+    void PlayBeepSFX(AudioSource source)
+    {
+        source.volume = UnityEngine.Random.Range(.2f, .3f);
+        source.pitch = 0.7f;
+
+        source.PlayOneShot(beepSFX);
+    }
+
+    public void QOESubmitPressed()
+    {
+        roundManager.qoeValue = qoeSlider.value;
+        roundManager.LogRoundData();
+        qoeSlider.value = 3.000f;
+        player.GetComponent<FPSController>().isQoeDisabled = true;
+        player.GetComponent<FPSController>().isPlayerReady = false;
+
+        roundManager.currentRoundNumber++;
+        
+
+        if (roundManager.currentRoundNumber > roundManager.totalRoundNumber)
+            Application.Quit();
+        roundManager.SetRounConfig();
+        player.GetComponent<FPSController>().ResetRound();
+        enemyManager.spawnTimer = 0;
+    }
+}
