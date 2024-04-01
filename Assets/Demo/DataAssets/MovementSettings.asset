@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4866b03a6252448db13225ec0b949cc9, type: 3}
   m_Name: MovementSettings
   m_EditorClassIdentifier: 
-  proneKey: 306
-  crouchKey: 99
+  proneKey: 0
+  crouchKey: 0
   sprintKey: 304
-  jumpKey: 32
-  slideKey: 120
+  jumpKey: 0
+  slideKey: 0
   idle:
     velocity: 0
     velocitySmoothing: 6.5

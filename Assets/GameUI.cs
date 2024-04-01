@@ -47,6 +47,9 @@ public class GameUI : MonoBehaviour
     public TMPro.TMP_Text sliderText;
     public GameObject qoeSubmitGO;
 
+    public GameManager gameManager;
+    public TMPro.TMP_Text lagText;
+
 
     // Start is called before the first frame update
     void Start()
@@ -184,6 +187,8 @@ public class GameUI : MonoBehaviour
 
         killsText.text = "Kills: " + player.GetComponent<FPSController>().roundKills;
         deathsText.text = "Deaths: " + player.GetComponent<FPSController>().roundDeaths;
+
+        lagText.text = gameManager.delayDuration.ToString();
 
         if (roundManager.currentRoundNumber <= roundManager.totalRoundNumber)
             roundText.text = "Round\n " + roundManager.currentRoundNumber + "/" + roundManager.totalRoundNumber;

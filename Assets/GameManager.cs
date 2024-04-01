@@ -11,6 +11,9 @@ public class GameManager : MonoBehaviour
     // Frame Feed
     long frameStartTime;
     List<float> frames = new List<float>();
+    List<float> delayDurationList = new List<float>();
+    int delayDurationIndex;
+
     bool isFrameFeeding;
     int frameCount;
     public TMPro.TMP_Text frameCountText;
@@ -33,6 +36,7 @@ public class GameManager : MonoBehaviour
         ReadCSV();
         isFrameFeeding = false;
         isFixedFT = true;
+        delayDurationIndex = 0;
     }
 
     // Update is called once per frame
@@ -50,9 +54,9 @@ public class GameManager : MonoBehaviour
             nowAfterLoop = 0;
         }
 
-        if (Input.GetKeyDown(KeyCode.Tab))
+        if (Input.GetKeyDown(KeyCode.LeftControl))
         {
-            //isEventBasedDelay = true;
+            isEventBasedDelay = true;
         }
 
         /*if (frameCount > 0)
@@ -76,15 +80,26 @@ public class GameManager : MonoBehaviour
                 return;
             }
         }
-
+        */
         while (isEventBasedDelay)
         {
             if (ElapsedNanoseconds(frameStartTime) >= delayDuration * 1000000)
             {
                 isEventBasedDelay = false;
+                delayDurationIndex++;
+
+                if(delayDurationIndex >= delayDurationList.Count)
+                {
+                    delayDurationIndex = 0;
+                }
+                else
+                {
+                     delayDuration = delayDurationList[delayDurationIndex];
+                }
+
                 return;
             }
-        }*/
+        }
 
         while (isFixedFT)
         {
@@ -166,6 +181,26 @@ public class GameManager : MonoBehaviour
                 frames.Add(float.Parse(line));
             }
         }
+
+        delayDurationList.Clear();
+        strReader = new StreamReader("Data\\DelayDuration.csv");
+        EOF = false;
+        while (!EOF)
+        {
+            line = strReader.ReadLine();
+
+            if (line == null)
+            {
+                EOF = true;
+                break;
+            }
+            else
+            {
+                delayDurationList.Add(float.Parse(line));
+            }
+        }
+
+
     }
 
     public static long ElapsedNanoseconds(long startTimestamp)

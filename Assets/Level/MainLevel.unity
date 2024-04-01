@@ -3026,6 +3026,8 @@ MonoBehaviour:
   qoeSlider: {fileID: 1967866917}
   sliderText: {fileID: 2012106643}
   qoeSubmitGO: {fileID: 290208505}
+  gameManager: {fileID: 1168704122}
+  lagText: {fileID: 1494118744}
 --- !u!4 &803020634 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2548205442821598081, guid: b70b1f0a30d08084da5a37347038cdb0, type: 3}
@@ -3704,7 +3706,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   frameCountText: {fileID: 1494118744}
-  delayDuration: 300
+  delayDuration: 30
   fixedFtDelayDuration: 0
   isFixedFT: 0
 --- !u!4 &1168704123
@@ -4249,12 +4251,12 @@ GameObject:
   - component: {fileID: 1494118745}
   - component: {fileID: 1494118744}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: Lag
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1494118744
 MonoBehaviour:
   m_ObjectHideFlags: 0
