@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
     long lastFrameOverWait;
 
     // Event Based
-    bool isEventBasedDelay;
+    public bool isEventBasedDelay;
     public float delayDuration; //ms
 
     public float fixedFtDelayDuration; //ns
@@ -199,8 +199,6 @@ public class GameManager : MonoBehaviour
                 delayDurationList.Add(float.Parse(line));
             }
         }
-
-
     }
 
     public static long ElapsedNanoseconds(long startTimestamp)

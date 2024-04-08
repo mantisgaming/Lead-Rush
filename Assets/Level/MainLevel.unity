@@ -1717,6 +1717,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 198000012283690144, guid: 96b2ec0239d11fa4b9792311efceb8ed, type: 3}
     - target: {fileID: 7195391591855915974, guid: 09dfc55288e2c514d98ea3b20e78195b, type: 3}
+      propertyPath: gameManager
+      value: 
+      objectReference: {fileID: 1168704122}
+    - target: {fileID: 7195391591855915974, guid: 09dfc55288e2c514d98ea3b20e78195b, type: 3}
       propertyPath: headshotSFX
       value: 
       objectReference: {fileID: 8300000, guid: e95e360764a37864785debe47826257f, type: 3}
@@ -1768,6 +1772,14 @@ PrefabInstance:
       propertyPath: 'weapons.Array.data[6]'
       value: 
       objectReference: {fileID: 512091159}
+    - target: {fileID: 7195391591855915974, guid: 09dfc55288e2c514d98ea3b20e78195b, type: 3}
+      propertyPath: enemyLargeCollidrLayer.m_Bits
+      value: 64
+      objectReference: {fileID: 0}
+    - target: {fileID: 7195391591855915974, guid: 09dfc55288e2c514d98ea3b20e78195b, type: 3}
+      propertyPath: enemyLargeColliderLayer.m_Bits
+      value: 64
+      objectReference: {fileID: 0}
     - target: {fileID: 7547053201941260935, guid: 09dfc55288e2c514d98ea3b20e78195b, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -3706,6 +3718,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   frameCountText: {fileID: 1494118744}
+  isEventBasedDelay: 0
   delayDuration: 30
   fixedFtDelayDuration: 0
   isFixedFT: 0
@@ -3768,6 +3781,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   roundConfigs:
     roundFPS: []
+    spikeMagnitude: []
+    onAimSpikeEnabled: 
+    onReloadSpikeEnabled: 
   roundDuration: 60
   roundTimer: 0
   totalRoundNumber: 0

@@ -172,6 +172,14 @@ namespace Demo.Scripts.Runtime
 
         public bool isQoeDisabled;
 
+        public GameManager gameManager;
+
+        public bool isAimSpikeEnabled;
+        public bool isReloadSpikeEnabled;
+
+        bool enemyAimedFuse;
+
+        public LayerMask enemyLargeColliderLayer;
         private void InitLayers()
         {
             InitAnimController();
@@ -232,6 +240,7 @@ namespace Demo.Scripts.Runtime
             EquipWeapon();
 
             playerAudioSource = GetComponent<AudioSource>();
+            enemyAimedFuse = false;
         }
 
         private void UnequipWeapon()
@@ -350,8 +359,6 @@ namespace Demo.Scripts.Runtime
         {
             if (HasActiveAction()) return;
 
-
-
             if (GetGun().currentAmmoCount <= 0)
             {
                 OnFireReleased();
@@ -359,6 +366,8 @@ namespace Demo.Scripts.Runtime
             }
 
             GetGun().currentAmmoCount--;
+
+
 
             GetGun().weaponAudioSource.PlayOneShot(GetGun().fireSFX);
             fireTimer = 60 / GetGun().fireRate;
@@ -529,7 +538,7 @@ namespace Demo.Scripts.Runtime
             if (GetGun().overlayType == Runtime.OverlayType.Rifle)
             {
                 locoLayer.BlendInIkPose(sprintPose);
-                
+
             }
 
             aimState = FPSAimState.None;
@@ -585,6 +594,8 @@ namespace Demo.Scripts.Runtime
 
             GetGun().currentAmmoCount = GetGun().magSize;
             realoadCountPerRound++;
+            if(isReloadSpikeEnabled)
+                gameManager.isEventBasedDelay = true;
 
             var reloadClip = GetGun().reloadClip;
 
@@ -671,7 +682,7 @@ namespace Demo.Scripts.Runtime
             {
                 bool wasLeaning = _isLeaning;
 
-                
+
 
                 bool rightLean = Input.GetKey(KeyCode.E);
                 bool leftLean = Input.GetKey(KeyCode.Q);
@@ -927,7 +938,7 @@ namespace Demo.Scripts.Runtime
                 UpdateActionInput();
                 UpdateLookInput();
                 OnSprintStarted();
-                
+
                 //Time.timeScale = 0.0f;
                 return;
             }
@@ -1001,7 +1012,7 @@ namespace Demo.Scripts.Runtime
             Vector3 targetPoint = muzzlePointTransform.position + muzzlePointTransform.TransformDirection(Vector3.forward);
             Vector3 directionWithoutSpread = targetPoint - muzzlePointTransform.position;
             // Does the ray intersect any objects excluding the player layer
-            if (Physics.Raycast(muzzlePointTransform.position, directionWithoutSpread, out hit, Mathf.Infinity))
+            if (Physics.Raycast(muzzlePointTransform.position, directionWithoutSpread, out hit, Mathf.Infinity, ~enemyLargeColliderLayer))
             {
                 reticleObject.gameObject.SetActive(true);
                 reticleObject.transform.position = hit.point;
@@ -1009,11 +1020,24 @@ namespace Demo.Scripts.Runtime
                 float distanceToReticle = Vector3.Distance(muzzlePointTransform.position, hit.point);
 
                 reticleObject.transform.localScale = new Vector3(1, 1, 1) * (0.007f + distanceToReticle / 200);
+
+
             }
             else
             {
-                //Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * 1000, Color.white);
                 reticleObject.gameObject.SetActive(false);
+                enemyAimedFuse = false;
+            }
+            RaycastHit largeColliderHit;
+            if ( isAimSpikeEnabled && Physics.Raycast(muzzlePointTransform.position, directionWithoutSpread, out largeColliderHit, Mathf.Infinity, enemyLargeColliderLayer))
+            {
+                if (enemyAimedFuse == false)
+                    gameManager.isEventBasedDelay = true;
+                enemyAimedFuse = true;
+            }
+            else
+            {
+                enemyAimedFuse = false;
             }
         }
 
@@ -1098,12 +1122,12 @@ namespace Demo.Scripts.Runtime
             GetComponent<CharacterController>().enabled = true;
             movementComponent.enabled = true;
 
-            enemyManager.DestroyAllEnemy(); 
+            enemyManager.DestroyAllEnemy();
         }
 
         public void ResetRound()
         {
-            
+
             GetGun().currentAmmoCount = GetGun().magSize;
 
             score = 0;

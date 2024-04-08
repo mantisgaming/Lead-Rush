@@ -10,6 +10,9 @@ using UnityEngine;
 public struct RoundConfigs
 {
     public List<float> roundFPS;
+    public List<float> spikeMagnitude;
+    public List<bool> onAimSpikeEnabled;
+    public List<bool> onReloadSpikeEnabled;
 }
 
 public class RoundManager : MonoBehaviour
@@ -123,8 +126,11 @@ public class RoundManager : MonoBehaviour
             else
             {
                 var dataValues = line.Split(',');
-
+                Debug.Log(dataValues[1]);
                 roundConfigs.roundFPS.Add(float.Parse(dataValues[0]));
+                roundConfigs.spikeMagnitude.Add(float.Parse(dataValues[1]));
+                roundConfigs.onAimSpikeEnabled.Add(bool.Parse(dataValues[2]));
+                roundConfigs.onReloadSpikeEnabled.Add(bool.Parse(dataValues[3]));
             }
         }
     }
@@ -149,7 +155,9 @@ public class RoundManager : MonoBehaviour
 
         Application.targetFrameRate = (int)roundConfigs.roundFPS[indexArray[currentRoundNumber - 1]];
 
-        gameManager.fixedFtDelayDuration = (1/roundConfigs.roundFPS[indexArray[currentRoundNumber - 1]])*1000000000;
+
+        playerController.isAimSpikeEnabled = roundConfigs.onAimSpikeEnabled[indexArray[currentRoundNumber - 1]];
+        playerController.isReloadSpikeEnabled = roundConfigs.onReloadSpikeEnabled[indexArray[currentRoundNumber - 1]];
 
         roundFrameCount = 0;
         frametimeCumulativeRound = 0;
