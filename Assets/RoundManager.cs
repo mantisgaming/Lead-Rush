@@ -13,6 +13,20 @@ public struct RoundConfigs
     public List<float> spikeMagnitude;
     public List<bool> onAimSpikeEnabled;
     public List<bool> onReloadSpikeEnabled;
+    public List<bool> onMouseSpikeEnabled;
+    public List<bool> onEnemySpawnSpikeEnabled;
+}
+
+[System.Serializable]
+public struct PlayerTickLog
+{
+    public List<string> time;
+    public List<float> mouseX;
+    public List<float> mouseY;
+
+    public List<float> playerX;
+    public List<float> playerY;
+    public List<float> playerZ;
 }
 
 public class RoundManager : MonoBehaviour
@@ -66,13 +80,13 @@ public class RoundManager : MonoBehaviour
         Shuffle(indexArray);
 
 
-        /*//Add practice round
-        int temp = indexArray[numberOfRounds - 1];
-        indexArray[numberOfRounds - 1] = indexArray[0];
+        //Add practice round
+        int temp = indexArray[totalRoundNumber - 1];
+        indexArray[totalRoundNumber - 1] = indexArray[0];
         indexArray[0] = 0;
         indexArray.Add(temp);
         indexArray.Add(0);
-        numberOfRounds++;*/
+        totalRoundNumber++;
 
 
         playerController.isQoeDisabled = true;
@@ -95,8 +109,9 @@ public class RoundManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(roundTimer > 0 && playerController.isPlayerReady && playerController.isQoeDisabled) { 
-            roundTimer-= Time.deltaTime;
+        if (roundTimer > 0 && playerController.isPlayerReady && playerController.isQoeDisabled)
+        {
+            roundTimer -= Time.deltaTime;
             frametimeCumulativeRound += Time.deltaTime;
             roundFrameCount++;
         }
@@ -131,6 +146,8 @@ public class RoundManager : MonoBehaviour
                 roundConfigs.spikeMagnitude.Add(float.Parse(dataValues[1]));
                 roundConfigs.onAimSpikeEnabled.Add(bool.Parse(dataValues[2]));
                 roundConfigs.onReloadSpikeEnabled.Add(bool.Parse(dataValues[3]));
+                roundConfigs.onMouseSpikeEnabled.Add(bool.Parse(dataValues[4]));
+                roundConfigs.onEnemySpawnSpikeEnabled.Add(bool.Parse(dataValues[5]));
             }
         }
     }
@@ -158,6 +175,8 @@ public class RoundManager : MonoBehaviour
 
         playerController.isAimSpikeEnabled = roundConfigs.onAimSpikeEnabled[indexArray[currentRoundNumber - 1]];
         playerController.isReloadSpikeEnabled = roundConfigs.onReloadSpikeEnabled[indexArray[currentRoundNumber - 1]];
+        playerController.isMouseMovementSpikeEnabled = roundConfigs.onMouseSpikeEnabled[indexArray[currentRoundNumber - 1]];
+        playerController.isEnemySpawnSpikeEnabled = roundConfigs.onEnemySpawnSpikeEnabled[indexArray[currentRoundNumber - 1]];
 
         roundFrameCount = 0;
         frametimeCumulativeRound = 0;
@@ -166,50 +185,78 @@ public class RoundManager : MonoBehaviour
 
     public void LogRoundData()
     {
-            PlayerStats stats = playerController.gameObject.GetComponent<PlayerStats>();
+        PlayerStats stats = playerController.gameObject.GetComponent<PlayerStats>();
 
-            TextWriter textWriter = null;
-            filenamePerRound = "Data\\Logs\\RoundData_"+ fileNameSuffix+".csv";
+        TextWriter textWriter = null;
+        filenamePerRound = "Data\\Logs\\RoundData_" + fileNameSuffix + ".csv";
 
-            while (textWriter == null)
-                textWriter = File.AppendText(filenamePerRound);
+        while (textWriter == null)
+            textWriter = File.AppendText(filenamePerRound);
 
-            float accuracy = 0;
-            if (playerController.shotsFiredPerRound > 0)
-            {
-                accuracy = (float)playerController.shotsHitPerRound / (float)playerController.shotsFiredPerRound;
-            }
+        float accuracy = 0;
+        if (playerController.shotsFiredPerRound > 0)
+        {
+            accuracy = (float)playerController.shotsHitPerRound / (float)playerController.shotsFiredPerRound;
+        }
 
         double avgFT = frametimeCumulativeRound / roundFrameCount;
         double avgFPS = 1 / avgFT;
 
-            String roundLogLine =
-               currentRoundNumber.ToString() + "," +
-               sessionStartTime.ToString() + "," +  
-               System.DateTime.Now.ToString() + "," +
-               roundConfigs.roundFPS[indexArray[currentRoundNumber - 1]].ToString() + "," +
-               indexArray[currentRoundNumber - 1].ToString() + "," +
-               playerController.score + "," +
-               playerController.shotsFiredPerRound + "," +
-               playerController.shotsHitPerRound + "," +
-               playerController.headshotsHitPerRound + "," + 
-               playerController.realoadCountPerRound + "," +
-               accuracy.ToString() + "," +
-               playerController.roundKills + "," +
-               playerController.roundDeaths + "," +
-               playerController.distanceTravelledPerRound + "," +
-               playerController.delXCumilative.ToString() + "," +
-               playerController.delYCumilative.ToString() + "," +
-               (playerController.delXCumilative + playerController.delYCumilative).ToString() + "," +
-               frametimeCumulativeRound.ToString() + "," +
-               roundFrameCount.ToString() + "," +
-               avgFT.ToString() + "," +
-               avgFPS.ToString() + ","+
-               qoeValue.ToString()
-                ;
-            textWriter.WriteLine(roundLogLine);
-            textWriter.Close();
-        }
-    
+        String roundLogLine =
+           currentRoundNumber.ToString() + "," +
+           sessionStartTime.ToString() + "," +
+           System.DateTime.Now.ToString() + "," +
+           roundConfigs.roundFPS[indexArray[currentRoundNumber - 1]].ToString() + "," +
+           indexArray[currentRoundNumber - 1].ToString() + "," +
+           playerController.score + "," +
+           playerController.shotsFiredPerRound + "," +
+           playerController.shotsHitPerRound + "," +
+           playerController.headshotsHitPerRound + "," +
+           playerController.realoadCountPerRound + "," +
+           accuracy.ToString() + "," +
+           playerController.roundKills + "," +
+           playerController.roundDeaths + "," +
+           playerController.distanceTravelledPerRound + "," +
+           playerController.delXCumilative.ToString() + "," +
+           playerController.delYCumilative.ToString() + "," +
+           (playerController.delXCumilative + playerController.delYCumilative).ToString() + "," +
+           frametimeCumulativeRound.ToString() + "," +
+           roundFrameCount.ToString() + "," +
+           avgFT.ToString() + "," +
+           avgFPS.ToString() + "," +
+           playerController.perRoundAimSpikeCount.ToString() + "," +
+           playerController.perRoundReloadSpikeCount.ToString() + "," +
+           playerController.perRoundMouseMovementSpikeCount.ToString() + "," +
+           playerController.perRoundEnemySpawnSpikeCount.ToString() + "," +
+           qoeValue.ToString()
+            ;
+        textWriter.WriteLine(roundLogLine);
+        textWriter.Close();
+    }
 
+    public void LogPlayerData()
+    {
+        PlayerStats stats = playerController.gameObject.GetComponent<PlayerStats>();
+
+        TextWriter textWriter = null;
+        filenamePerRound = "Data\\Logs\\PlayerData_" + fileNameSuffix + ".csv";
+        while (textWriter == null)
+            textWriter = File.AppendText(filenamePerRound);
+
+        for (int i = 0; i < playerController.playerTickLog.mouseX.Count; i++)
+        {
+            String tickLogLine =
+               currentRoundNumber.ToString() + "," +
+               playerController.playerTickLog.time[i].ToString() + "," +
+               playerController.playerTickLog.mouseX[i].ToString() + "," +
+               playerController.playerTickLog.mouseY[i].ToString() + "," +
+               playerController.playerTickLog.playerX[i].ToString() + "," +
+               playerController.playerTickLog.playerY[i].ToString() + "," +
+               playerController.playerTickLog.playerZ[i].ToString();
+
+            textWriter.WriteLine(tickLogLine);
+        }
+        textWriter.Close();
+
+    }
 }

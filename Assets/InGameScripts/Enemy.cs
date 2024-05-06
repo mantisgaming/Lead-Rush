@@ -20,6 +20,10 @@ public class Enemy : MonoBehaviour
 
     public ParticleSystem explodePE;
 
+    public CapsuleCollider largeCollider;
+
+    public Transform headTransform;
+
 
 
     // Start is called before the first frame update
@@ -37,6 +41,10 @@ public class Enemy : MonoBehaviour
         if (!playerController.isPlayerReady || !playerController.isQoeDisabled)
             return;
         enemyAgent.destination = player.transform.position;
+
+       
+
+        largeCollider.transform.localScale = new Vector3(1.5F + Mathf.PingPong(Time.time, 1.0f),1,1);
     }
 
     public void TakeDamage(float damage)
@@ -46,7 +54,7 @@ public class Enemy : MonoBehaviour
         {
             player.GetComponent<FPSController>().killCooldown = .3f;
             player.GetComponent<FPSController>().PlayKillSFX();
-            Instantiate(deathPE, this.transform.position, this.transform.rotation);
+            Instantiate(deathPE, headTransform.position, headTransform.rotation);
             //Destroy the Instantiated ParticleSystem 
 
             Destroy(gameObject);
@@ -61,7 +69,7 @@ public class Enemy : MonoBehaviour
         //Debug.Log("Enemycol: " + other.gameObject.name);
         if (other.gameObject.tag == "Player")
         {
-            Instantiate(explodePE, this.transform.position, this.transform.rotation);
+            Instantiate(explodePE, headTransform.position, headTransform.rotation);
             player.GetComponent<FPSController>().PlayDeathSFX();
             player.GetComponent<FPSController>().RespawnPlayer();
         }

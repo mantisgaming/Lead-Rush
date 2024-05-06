@@ -50,6 +50,9 @@ public class GameUI : MonoBehaviour
     public GameManager gameManager;
     public TMPro.TMP_Text lagText;
 
+    float sliderHandleRed;
+    float sliderHandleGreen;
+    public Image SliderHandle;
 
     // Start is called before the first frame update
     void Start()
@@ -191,7 +194,12 @@ public class GameUI : MonoBehaviour
         lagText.text = gameManager.delayDuration.ToString();
 
         if (roundManager.currentRoundNumber <= roundManager.totalRoundNumber)
+        {
+            if(roundManager.currentRoundNumber ==1)
+                roundText.text = "Round\n " + roundManager.currentRoundNumber + "/" + roundManager.totalRoundNumber +"\nPractice" ;
+            else
             roundText.text = "Round\n " + roundManager.currentRoundNumber + "/" + roundManager.totalRoundNumber;
+        }
         else
             roundText.text = "Thank You!";
 
@@ -204,11 +212,32 @@ public class GameUI : MonoBehaviour
 
         if (qoeSliderGO.activeSelf)
         {
-            sliderText.text = qoeSlider.value.ToString("#.#");
-            if (qoeSlider.value != 3.000f)
+            sliderText.text = (qoeSlider.value/10.0).ToString("#.#");
+            /*if (qoeSlider.value != 3.000f)
                 qoeSubmitGO.SetActive(true);
             else
-                qoeSubmitGO.SetActive(false);
+                qoeSubmitGO.SetActive(false);*/
+
+            if (qoeSlider.value <= 30)
+            {
+                sliderHandleRed = 1; // From 10 to 30, red is full
+            }
+            else
+            {
+                sliderHandleRed = (50 - qoeSlider.value) / 20; // Decreases to 0 by the time it reaches 50
+            }
+
+            // sliderHandleGreen scaling
+            if (qoeSlider.value <= 30)
+            {
+                sliderHandleGreen = (qoeSlider.value - 10) / 20; // Increases to 1 by the time it reaches 30
+            }
+            else
+            {
+                sliderHandleGreen = 1; // Remains full from 30 to 50
+            }
+
+            SliderHandle.color = new Color(sliderHandleRed, sliderHandleGreen,0,1);
         }
     }
 
@@ -302,9 +331,13 @@ public class GameUI : MonoBehaviour
 
     public void QOESubmitPressed()
     {
-        roundManager.qoeValue = qoeSlider.value;
+        roundManager.qoeValue = (float)qoeSlider.value/10.0f;
         roundManager.LogRoundData();
-        qoeSlider.value = 3.000f;
+        roundManager.LogPlayerData();
+
+
+        qoeSlider.value = 30.000f;
+        qoeSubmitGO.SetActive(false);
         player.GetComponent<FPSController>().isQoeDisabled = true;
         player.GetComponent<FPSController>().isPlayerReady = false;
 

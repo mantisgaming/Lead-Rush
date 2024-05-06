@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   proneKey: 0
   crouchKey: 0
-  sprintKey: 304
+  sprintKey: 0
   jumpKey: 0
   slideKey: 0
   idle:

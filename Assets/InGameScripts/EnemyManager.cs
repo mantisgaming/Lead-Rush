@@ -70,5 +70,11 @@ public class EnemyManager : MonoBehaviour
     {
         int spawnIndex = Random.Range(0, sapwnPoints.Count - 1);
         Instantiate(enemy, sapwnPoints[spawnIndex].position, sapwnPoints[spawnIndex].rotation);
+
+        if (playerController.isEnemySpawnSpikeEnabled)
+        {
+            playerController.gameManager.isEventBasedDelay = true;
+            playerController.perRoundEnemySpawnSpikeCount++;
+        }
     }
 }
