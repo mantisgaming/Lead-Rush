@@ -58,6 +58,8 @@ public class RoundManager : MonoBehaviour
 
     public float qoeValue;
 
+    public int sessionID = -1;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -67,7 +69,7 @@ public class RoundManager : MonoBehaviour
 
         gameManager = GetComponent<GameManager>();
 
-        ReadCSV();
+        ReadFromLatinSquare();
 
         totalRoundNumber = roundConfigs.roundFPS.Count;
 
@@ -77,16 +79,16 @@ public class RoundManager : MonoBehaviour
         }
 
         // Shuffle the list
-        Shuffle(indexArray);
+        //Shuffle(indexArray);
 
-
+        //LEGACY CODE
         //Add practice round
-        int temp = indexArray[totalRoundNumber - 1];
+        /*int temp = indexArray[totalRoundNumber - 1];
         indexArray[totalRoundNumber - 1] = indexArray[0];
         indexArray[0] = 0;
         indexArray.Add(temp);
         indexArray.Add(0);
-        totalRoundNumber++;
+        totalRoundNumber++;*/
 
 
         playerController.isQoeDisabled = true;
@@ -122,6 +124,82 @@ public class RoundManager : MonoBehaviour
         }
     }
 
+    public void ReadFromLatinSquare()
+    {
+        string line = null;
+        StreamReader strReader = new StreamReader("Data\\Configs\\SessionID.csv");
+        bool EOF = false;
+        roundConfigs.roundFPS.Clear();
+
+        sessionID = -1;
+
+        while (!EOF)
+        {
+            line = strReader.ReadLine();
+
+            if (line == null)
+            {
+                EOF = true;
+                break;
+            }
+            else
+            {
+                var dataValues = line.Split(',');
+                sessionID = int.Parse(dataValues[0]);
+            }
+        }
+
+        line = null;
+        strReader = new StreamReader("Data\\Configs\\LatinSquare.csv");
+        EOF = false;
+        int index = 1;
+
+        //Practice
+        roundConfigs.roundFPS.Add(500);
+        roundConfigs.roundFPS.Add(7);
+
+        while (!EOF)
+        {
+            line = strReader.ReadLine();
+
+            if (line == null)
+            {
+                EOF = true;
+                break;
+            }
+            else
+            {
+                var dataValues = line.Split(',');
+                if (index == sessionID)
+                {
+                    for (int i = 0; i < dataValues.Length; i++)
+                        roundConfigs.roundFPS.Add(float.Parse(dataValues[i]));
+
+                    // Round x2
+                    for (int i = 0; i < dataValues.Length; i++)
+                        roundConfigs.roundFPS.Add(float.Parse(dataValues[i]));
+                    FrameRateSudySpikeConfigFiller(dataValues.Length);
+                    break;
+                }
+            }
+            index++;
+        }
+    }
+
+    public void FrameRateSudySpikeConfigFiller(int length)
+    {
+        for (int i = 0; i < length * 2 + 2; i++)
+        {
+            roundConfigs.spikeMagnitude.Add(100);
+            roundConfigs.onAimSpikeEnabled.Add(false);
+            roundConfigs.onReloadSpikeEnabled.Add(false);
+            roundConfigs.onMouseSpikeEnabled.Add(false);
+            roundConfigs.onEnemySpawnSpikeEnabled.Add(false);
+        }
+    }
+
+
+    // Primary Config
     public void ReadCSV()
     {
         string line = null;

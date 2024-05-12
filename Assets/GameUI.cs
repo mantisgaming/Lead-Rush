@@ -2,6 +2,7 @@ using Demo.Scripts.Runtime;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -196,7 +197,9 @@ public class GameUI : MonoBehaviour
         if (roundManager.currentRoundNumber <= roundManager.totalRoundNumber)
         {
             if(roundManager.currentRoundNumber ==1)
-                roundText.text = "Round\n " + roundManager.currentRoundNumber + "/" + roundManager.totalRoundNumber +"\nPractice" ;
+                roundText.text = "Round\n " + roundManager.currentRoundNumber + "/" + roundManager.totalRoundNumber +"\nSmoothest Practice Round" ;
+            else if (roundManager.currentRoundNumber == 2)
+                roundText.text = "Round\n " + roundManager.currentRoundNumber + "/" + roundManager.totalRoundNumber + "\nChoppiest Practice Round";
             else
             roundText.text = "Round\n " + roundManager.currentRoundNumber + "/" + roundManager.totalRoundNumber;
         }
@@ -342,10 +345,26 @@ public class GameUI : MonoBehaviour
         player.GetComponent<FPSController>().isPlayerReady = false;
 
         roundManager.currentRoundNumber++;
-        
+
 
         if (roundManager.currentRoundNumber > roundManager.totalRoundNumber)
-            Application.Quit();
+        {
+            TextWriter textWriter = null;
+            string filename = "Data\\Configs\\SessionID.csv";
+
+            while (textWriter == null)
+                textWriter = File.AppendText(filename);
+
+            roundManager.sessionID++;
+
+            if (roundManager.sessionID > 12)
+                roundManager.sessionID = 1;
+
+            textWriter.WriteLine(roundManager.sessionID);
+            textWriter.Close();
+
+            Application.Quit(); 
+        }
         roundManager.SetRounConfig();
         player.GetComponent<FPSController>().ResetRound();
         enemyManager.spawnTimer = 0;
