@@ -187,24 +187,14 @@ public class GameUI : MonoBehaviour
         ammoText.text = "" + player.GetComponent<FPSController>().GetGun().currentAmmoCount;
         healthText.text = "      " + player.GetComponent<PlayerStats>().currentHealth;
         scoreText.text = "Score: " + player.GetComponent<FPSController>().score;
-        durationText.text = "Duration: " + roundManager.roundTimer.ToString("#.#");
+        durationText.text = "Duration: " + roundManager.roundTimer.ToString("###");
 
         killsText.text = "Kills: " + player.GetComponent<FPSController>().roundKills;
         deathsText.text = "Deaths: " + player.GetComponent<FPSController>().roundDeaths;
 
         lagText.text = gameManager.delayDuration.ToString();
 
-        if (roundManager.currentRoundNumber <= roundManager.totalRoundNumber)
-        {
-            if(roundManager.currentRoundNumber ==1)
-                roundText.text = "Round\n " + roundManager.currentRoundNumber + "/" + roundManager.totalRoundNumber +"\nSmoothest Practice Round" ;
-            else if (roundManager.currentRoundNumber == 2)
-                roundText.text = "Round\n " + roundManager.currentRoundNumber + "/" + roundManager.totalRoundNumber + "\nChoppiest Practice Round";
-            else
-            roundText.text = "Round\n " + roundManager.currentRoundNumber + "/" + roundManager.totalRoundNumber;
-        }
-        else
-            roundText.text = "Thank You!";
+        
 
         if (!player.GetComponent<FPSController>().isPlayerReady)
             readyText.SetActive(true);
@@ -215,6 +205,18 @@ public class GameUI : MonoBehaviour
 
         if (qoeSliderGO.activeSelf)
         {
+            if (roundManager.currentRoundNumber <= roundManager.totalRoundNumber)
+            {
+                if (roundManager.currentRoundNumber == 1)
+                    roundText.text = "Round\n " + roundManager.currentRoundNumber + "/" + roundManager.totalRoundNumber + "\nSmoothest Practice Round";
+                else if (roundManager.currentRoundNumber == 2)
+                    roundText.text = "Round\n " + roundManager.currentRoundNumber + "/" + roundManager.totalRoundNumber + "\nChoppiest Practice Round";
+                else
+                    roundText.text = "Round\n " + roundManager.currentRoundNumber + "/" + roundManager.totalRoundNumber;
+            }
+            else
+                roundText.text = "Thank You!";
+
             sliderText.text = (qoeSlider.value/10.0).ToString("#.#");
             /*if (qoeSlider.value != 3.000f)
                 qoeSubmitGO.SetActive(true);
@@ -241,6 +243,10 @@ public class GameUI : MonoBehaviour
             }
 
             SliderHandle.color = new Color(sliderHandleRed, sliderHandleGreen,0,1);
+        }
+        else
+        {
+            roundText.text = "";
         }
     }
 

@@ -11,6 +11,7 @@ using Random = UnityEngine.Random;
 using UnityEngine.Audio;
 using Unity.Mathematics;
 using System.Drawing;
+using UnityEngine.UI;
 
 namespace Demo.Scripts.Runtime
 {
@@ -195,6 +196,10 @@ namespace Demo.Scripts.Runtime
         public int perRoundEnemySpawnSpikeCount;
 
         public PlayerTickLog playerTickLog;
+
+        public Image clickToPhotonIMG;
+
+        public RoundManager roundManager;
         private void InitLayers()
         {
             InitAnimController();
@@ -267,6 +272,10 @@ namespace Demo.Scripts.Runtime
             playerTickLog.playerX = new List<float>();
             playerTickLog.playerY = new List<float>();
             playerTickLog.playerZ = new List<float>();
+
+            playerTickLog.roundTimer = new List<float>();
+
+            playerTickLog.scorePerSec = new List<float>();
 
             playerTickLog.time.Clear();
             playerTickLog.mouseX.Clear();
@@ -738,11 +747,15 @@ namespace Demo.Scripts.Runtime
                 if (Input.GetKeyDown(KeyCode.Mouse0))
                 {
                     OnFirePressed();
+                    if (clickToPhotonIMG.isActiveAndEnabled)
+                        clickToPhotonIMG.color = new UnityEngine.Color(.8f, .8f, .8f, 1f);
                 }
 
                 if (Input.GetKeyUp(KeyCode.Mouse0))
                 {
                     OnFireReleased();
+                    if(clickToPhotonIMG.isActiveAndEnabled)
+                        clickToPhotonIMG.color = new UnityEngine.Color(.2f, .2f, .2f, 1f);
                 }
 
                 if (Input.GetKeyDown(KeyCode.Mouse1))
@@ -1032,6 +1045,10 @@ namespace Demo.Scripts.Runtime
             playerTickLog.playerX.Add(transform.position.x);
             playerTickLog.playerY.Add(transform.position.y);
             playerTickLog.playerZ.Add(transform.position.z);
+
+            playerTickLog.scorePerSec.Add(score / (roundManager.roundDuration - roundManager.roundTimer));
+
+            playerTickLog.roundTimer.Add((roundManager.roundDuration - roundManager.roundTimer));
         }
 
         void UpdateCooldowns()
@@ -1221,6 +1238,9 @@ namespace Demo.Scripts.Runtime
             playerTickLog.playerX.Clear();
             playerTickLog.playerY.Clear();
             playerTickLog.playerZ.Clear();  
+
+            playerTickLog.scorePerSec.Clear();
+            playerTickLog.roundTimer.Clear();
         }
     }
 }

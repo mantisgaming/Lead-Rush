@@ -21,12 +21,15 @@ public struct RoundConfigs
 public struct PlayerTickLog
 {
     public List<string> time;
+    public List<float> roundTimer;
     public List<float> mouseX;
     public List<float> mouseY;
 
     public List<float> playerX;
     public List<float> playerY;
     public List<float> playerZ;
+
+    public List<float> scorePerSec;
 }
 
 public class RoundManager : MonoBehaviour
@@ -146,6 +149,25 @@ public class RoundManager : MonoBehaviour
             {
                 var dataValues = line.Split(',');
                 sessionID = int.Parse(dataValues[0]);
+            }
+        }
+
+        line = null;
+        strReader = new StreamReader("Data\\Configs\\GlobalConfig.csv");
+        EOF = false;
+        while (!EOF)
+        {
+            line = strReader.ReadLine();
+
+            if (line == null)
+            {
+                EOF = true;
+                break;
+            }
+            else
+            {
+                var dataValues = line.Split(',');
+                roundDuration = float.Parse(dataValues[0]);
             }
         }
 
@@ -325,12 +347,14 @@ public class RoundManager : MonoBehaviour
         {
             String tickLogLine =
                currentRoundNumber.ToString() + "," +
+               playerController.playerTickLog.roundTimer[i].ToString() + "," +
                playerController.playerTickLog.time[i].ToString() + "," +
                playerController.playerTickLog.mouseX[i].ToString() + "," +
                playerController.playerTickLog.mouseY[i].ToString() + "," +
                playerController.playerTickLog.playerX[i].ToString() + "," +
                playerController.playerTickLog.playerY[i].ToString() + "," +
-               playerController.playerTickLog.playerZ[i].ToString();
+               playerController.playerTickLog.playerZ[i].ToString() + "," +
+               playerController.playerTickLog.scorePerSec[i].ToString();
 
             textWriter.WriteLine(tickLogLine);
         }
