@@ -29,6 +29,11 @@ public struct PlayerTickLog
     public List<float> playerY;
     public List<float> playerZ;
 
+    public List<Quaternion> playerRot;
+    
+    public List<Vector3> enemyPos;
+    public List<bool> isADS;
+
     public List<float> scorePerSec;
 }
 
@@ -42,18 +47,18 @@ public class RoundManager : MonoBehaviour
 
     public int totalRoundNumber;
 
-    List<int> indexArray = new List<int>();
+    public List<int> indexArray = new List<int>();
 
-    GameManager gameManager;
+    public GameManager gameManager;
 
     public int currentRoundNumber;
 
-    String sessionStartTime;
+    public String sessionStartTime;
 
     public FPSController playerController;
 
-    long roundFrameCount = 0;
-    double frametimeCumulativeRound = 0;
+    public long roundFrameCount = 0;
+    public double frametimeCumulativeRound = 0;
 
     public string fileNameSuffix = "";
     public String filenamePerTick = "Data\\ClientDataPerTick.csv";
@@ -63,6 +68,8 @@ public class RoundManager : MonoBehaviour
 
     public int sessionID = -1;
 
+   public bool isFTStudy;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -71,6 +78,8 @@ public class RoundManager : MonoBehaviour
         sessionStartTime = System.DateTime.Now.ToString("yy:mm:dd:hh:mm:ss");
 
         gameManager = GetComponent<GameManager>();
+
+        ReadGlobalConfig();
 
         ReadFromLatinSquare();
 
@@ -115,7 +124,7 @@ public class RoundManager : MonoBehaviour
     void Update()
     {
         if (roundTimer > 0 && playerController.isPlayerReady && playerController.isQoeDisabled)
-        {
+        { 
             roundTimer -= Time.deltaTime;
             frametimeCumulativeRound += Time.deltaTime;
             roundFrameCount++;
@@ -124,6 +133,30 @@ public class RoundManager : MonoBehaviour
         {
             playerController.isQoeDisabled = false;
             playerController.ResetPlayerAndDestroyEnemy();
+        }
+    }
+
+
+    void ReadGlobalConfig()
+    {
+        string line = null;
+        StreamReader strReader = new StreamReader("Data\\Configs\\GlobalConfig.csv");
+        bool EOF = false;
+        while (!EOF)
+        {
+            line = strReader.ReadLine();
+
+            if (line == null)
+            {
+                EOF = true;
+                break;
+            }
+            else
+            {
+                var dataValues = line.Split(',');
+                roundDuration = float.Parse(dataValues[0]);
+                isFTStudy = bool.Parse(dataValues[1]);
+            }
         }
     }
 
@@ -152,59 +185,57 @@ public class RoundManager : MonoBehaviour
             }
         }
 
-        line = null;
-        strReader = new StreamReader("Data\\Configs\\GlobalConfig.csv");
-        EOF = false;
-        while (!EOF)
-        {
-            line = strReader.ReadLine();
-
-            if (line == null)
-            {
-                EOF = true;
-                break;
-            }
-            else
-            {
-                var dataValues = line.Split(',');
-                roundDuration = float.Parse(dataValues[0]);
-            }
-        }
+        
 
         line = null;
         strReader = new StreamReader("Data\\Configs\\LatinSquare.csv");
         EOF = false;
         int index = 1;
 
-        //Practice
-        roundConfigs.roundFPS.Add(500);
-        roundConfigs.roundFPS.Add(7);
-
-        while (!EOF)
+        if (!isFTStudy)
         {
-            line = strReader.ReadLine();
+            //Practice
+            roundConfigs.roundFPS.Add(500);
+            roundConfigs.roundFPS.Add(7);
 
-            if (line == null)
+            while (!EOF)
             {
-                EOF = true;
-                break;
-            }
-            else
-            {
-                var dataValues = line.Split(',');
-                if (index == sessionID)
+                line = strReader.ReadLine();
+
+                if (line == null)
                 {
-                    for (int i = 0; i < dataValues.Length; i++)
-                        roundConfigs.roundFPS.Add(float.Parse(dataValues[i]));
-
-                    // Round x2
-                    for (int i = 0; i < dataValues.Length; i++)
-                        roundConfigs.roundFPS.Add(float.Parse(dataValues[i]));
-                    FrameRateSudySpikeConfigFiller(dataValues.Length);
+                    EOF = true;
                     break;
                 }
+                else
+                {
+                    var dataValues = line.Split(',');
+                    if (index == sessionID)
+                    {
+                        for (int i = 0; i < dataValues.Length; i++)
+                            roundConfigs.roundFPS.Add(float.Parse(dataValues[i]));
+
+                        /*// Round x2
+                        for (int i = 0; i < dataValues.Length; i++)
+                            roundConfigs.roundFPS.Add(float.Parse(dataValues[i]));*/
+                        FrameRateSudySpikeConfigFiller(dataValues.Length);
+                        break;
+                    }
+                }
+                index++;
             }
-            index++;
+        }
+        else
+        {
+            //Practice round
+            roundConfigs.roundFPS.Add(500);
+            roundConfigs.spikeMagnitude.Add(100);
+            roundConfigs.onAimSpikeEnabled.Add(false);
+            roundConfigs.onReloadSpikeEnabled.Add(false);
+            roundConfigs.onMouseSpikeEnabled.Add(false);
+            roundConfigs.onEnemySpawnSpikeEnabled.Add(false);
+
+            ReadFTStudyCSV();
         }
     }
 
@@ -222,7 +253,7 @@ public class RoundManager : MonoBehaviour
 
 
     // Primary Config
-    public void ReadCSV()
+    public void ReadFTStudyCSV()
     {
         string line = null;
         StreamReader strReader = new StreamReader("Data\\Configs\\RoundConfig.csv");
@@ -288,7 +319,7 @@ public class RoundManager : MonoBehaviour
         PlayerStats stats = playerController.gameObject.GetComponent<PlayerStats>();
 
         TextWriter textWriter = null;
-        filenamePerRound = "Data\\Logs\\RoundData_" + fileNameSuffix + ".csv";
+        filenamePerRound = "Data\\Logs\\RoundData_" + fileNameSuffix + "_" + sessionID + "_" + ".csv";
 
         while (textWriter == null)
             textWriter = File.AppendText(filenamePerRound);
@@ -299,20 +330,30 @@ public class RoundManager : MonoBehaviour
             accuracy = (float)playerController.shotsHitPerRound / (float)playerController.shotsFiredPerRound;
         }
 
+        float degXTargetAvg = playerController.degreeToTargetXCumulative / playerController.roundKills;
+        float degXShootAvg = playerController.degreeToShootXCumulative / playerController.roundKills;
+
         double avgFT = frametimeCumulativeRound / roundFrameCount;
         double avgFPS = 1 / avgFT;
 
         String roundLogLine =
+           sessionID.ToString() + "," +
            currentRoundNumber.ToString() + "," +
            sessionStartTime.ToString() + "," +
            System.DateTime.Now.ToString() + "," +
            roundConfigs.roundFPS[indexArray[currentRoundNumber - 1]].ToString() + "," +
+           roundConfigs.spikeMagnitude[indexArray[currentRoundNumber - 1]].ToString() + "," +
+           roundConfigs.onAimSpikeEnabled[indexArray[currentRoundNumber - 1]].ToString() + "," +
+           roundConfigs.onEnemySpawnSpikeEnabled[indexArray[currentRoundNumber - 1]].ToString() + "," +
+           roundConfigs.onMouseSpikeEnabled[indexArray[currentRoundNumber - 1]].ToString() + "," +
+           roundConfigs.onReloadSpikeEnabled[indexArray[currentRoundNumber - 1]].ToString() + "," +
            indexArray[currentRoundNumber - 1].ToString() + "," +
            playerController.score + "," +
            playerController.shotsFiredPerRound + "," +
            playerController.shotsHitPerRound + "," +
            playerController.headshotsHitPerRound + "," +
            playerController.realoadCountPerRound + "," +
+           playerController.tacticalReloadCountPerRound + "," +
            accuracy.ToString() + "," +
            playerController.roundKills + "," +
            playerController.roundDeaths + "," +
@@ -328,6 +369,11 @@ public class RoundManager : MonoBehaviour
            playerController.perRoundReloadSpikeCount.ToString() + "," +
            playerController.perRoundMouseMovementSpikeCount.ToString() + "," +
            playerController.perRoundEnemySpawnSpikeCount.ToString() + "," +
+           playerController.degreeToShootXCumulative.ToString() + "," +
+           playerController.degreeToTargetXCumulative.ToString() + "," +
+           playerController.minAnlgeToEnemyCumulative.ToString() + "," +
+           degXShootAvg.ToString() + "," +
+           degXTargetAvg.ToString() + "," +
            qoeValue.ToString()
             ;
         textWriter.WriteLine(roundLogLine);
@@ -339,14 +385,22 @@ public class RoundManager : MonoBehaviour
         PlayerStats stats = playerController.gameObject.GetComponent<PlayerStats>();
 
         TextWriter textWriter = null;
-        filenamePerRound = "Data\\Logs\\PlayerData_" + fileNameSuffix + ".csv";
+        filenamePerRound = "Data\\Logs\\PlayerData_" + fileNameSuffix + "_" +sessionID + "_" + ".csv";
         while (textWriter == null)
             textWriter = File.AppendText(filenamePerRound);
 
         for (int i = 0; i < playerController.playerTickLog.mouseX.Count; i++)
         {
             String tickLogLine =
+               sessionID.ToString() + "," +
                currentRoundNumber.ToString() + "," +
+               roundConfigs.roundFPS[indexArray[currentRoundNumber - 1]].ToString() + "," +
+               roundConfigs.spikeMagnitude[indexArray[currentRoundNumber - 1]].ToString() + "," +
+               roundConfigs.onAimSpikeEnabled[indexArray[currentRoundNumber - 1]].ToString() + "," +
+               roundConfigs.onEnemySpawnSpikeEnabled[indexArray[currentRoundNumber - 1]].ToString() + "," +
+               roundConfigs.onMouseSpikeEnabled[indexArray[currentRoundNumber - 1]].ToString() + "," +
+               roundConfigs.onReloadSpikeEnabled[indexArray[currentRoundNumber - 1]].ToString() + "," +
+               indexArray[currentRoundNumber - 1].ToString() + "," +
                playerController.playerTickLog.roundTimer[i].ToString() + "," +
                playerController.playerTickLog.time[i].ToString() + "," +
                playerController.playerTickLog.mouseX[i].ToString() + "," +
@@ -354,7 +408,10 @@ public class RoundManager : MonoBehaviour
                playerController.playerTickLog.playerX[i].ToString() + "," +
                playerController.playerTickLog.playerY[i].ToString() + "," +
                playerController.playerTickLog.playerZ[i].ToString() + "," +
-               playerController.playerTickLog.scorePerSec[i].ToString();
+               playerController.playerTickLog.scorePerSec[i].ToString() + "," +
+               playerController.playerTickLog.playerRot[i].ToString() + "," +
+               playerController.playerTickLog.enemyPos[i].ToString() + "," +
+               playerController.playerTickLog.isADS[i].ToString();
 
             textWriter.WriteLine(tickLogLine);
         }

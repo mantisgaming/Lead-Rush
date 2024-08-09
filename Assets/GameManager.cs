@@ -56,7 +56,7 @@ public class GameManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.LeftControl))
         {
-            isEventBasedDelay = true;
+            //isEventBasedDelay = true;
         }
 
         /*if (frameCount > 0)

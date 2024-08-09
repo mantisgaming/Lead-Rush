@@ -23,8 +23,8 @@ public class EnemyManager : MonoBehaviour
     public float walkwableAreaRadius;
     float spawnAngle;
 
-    
-    
+
+
 
     void Start()
     {
@@ -46,7 +46,7 @@ public class EnemyManager : MonoBehaviour
 
         spawnTimer -= Time.deltaTime;
         enemiesInScene = GameObject.FindGameObjectsWithTag("Enemy").Length;
-        if (spawnTimer < 0 && enemiesInScene< maxEnemyCount)
+        if (spawnTimer < 0 && enemiesInScene < maxEnemyCount)
         {
             SpawnEnemy();
             spawnTimer = spawnDuration;
@@ -55,8 +55,11 @@ public class EnemyManager : MonoBehaviour
 
     public void DestroyAllEnemy()
     {
-       foreach (GameObject enemy in GameObject.FindGameObjectsWithTag("Enemy"))
-            Destroy(enemy);
+        Enemy enemy = GameObject.FindGameObjectWithTag("Enemy").GetComponent<Enemy>();
+        if (enemy != null)
+            enemy.EnemyLog();
+        Destroy(enemy.gameObject);
+
     }
 
     public GameObject GetClosestEnemy()
@@ -67,7 +70,8 @@ public class EnemyManager : MonoBehaviour
 
         foreach (GameObject enemy in GameObject.FindGameObjectsWithTag("Enemy"))
         {
-            if (Vector3.Distance(player.transform.position, enemy.transform.position) < minDist) {
+            if (Vector3.Distance(player.transform.position, enemy.transform.position) < minDist)
+            {
                 minDist = Vector3.Distance(player.transform.position, enemy.transform.position);
                 closestEnemyGO = enemy;
             }
@@ -97,7 +101,7 @@ public class EnemyManager : MonoBehaviour
 
     public Vector3 CalculateDistantPoint(Vector3 playerPosition, float distance, float angle)
     {
-        float angleRad =  Mathf.Deg2Rad * angle;
+        float angleRad = Mathf.Deg2Rad * angle;
         float xOffset = distance * Mathf.Cos(angleRad);
         float zOffset = distance * Mathf.Sin(angleRad);
 

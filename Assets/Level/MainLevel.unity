@@ -2661,6 +2661,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2064364865}
     - target: {fileID: 7195391591855915974, guid: 09dfc55288e2c514d98ea3b20e78195b, type: 3}
+      propertyPath: turnInPlaceAngle
+      value: 85
+      objectReference: {fileID: 0}
+    - target: {fileID: 7195391591855915974, guid: 09dfc55288e2c514d98ea3b20e78195b, type: 3}
       propertyPath: 'weapons.Array.data[0]'
       value: 
       objectReference: {fileID: 384210478}
@@ -3800,7 +3804,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &695640309
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6527,7 +6531,7 @@ GameObject:
   - component: {fileID: 1168704125}
   m_Layer: 0
   m_Name: GameManager
-  m_TagString: Untagged
+  m_TagString: Manager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6619,13 +6623,19 @@ MonoBehaviour:
   roundDuration: 60
   roundTimer: 0
   totalRoundNumber: 0
+  indexArray: 
+  gameManager: {fileID: 0}
   currentRoundNumber: 0
+  sessionStartTime: 
   playerController: {fileID: 379593521}
+  roundFrameCount: 0
+  frametimeCumulativeRound: 0
   fileNameSuffix: 
   filenamePerTick: Data\ClientDataPerTick.csv
   filenamePerRound: Data\ClientDataPerRound.csv
   qoeValue: 0
   sessionID: -1
+  isFTStudy: 0
 --- !u!1001 &1230818441
 PrefabInstance:
   m_ObjectHideFlags: 0

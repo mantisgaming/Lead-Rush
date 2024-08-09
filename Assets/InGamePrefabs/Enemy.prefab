@@ -251,6 +251,8 @@ MonoBehaviour:
   explodePE: {fileID: 198856239026640498, guid: 9bba9cf244c53c5439505dfc96fdd11c, type: 3}
   largeCollider: {fileID: 7739772184088316282}
   headTransform: {fileID: 7648751747346632977}
+  minAngleToPlayer: 0
+  manager: {fileID: 0}
 --- !u!1 &5628584378806856085
 GameObject:
   m_ObjectHideFlags: 0

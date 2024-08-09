@@ -200,6 +200,24 @@ namespace Demo.Scripts.Runtime
         public Image clickToPhotonIMG;
 
         public RoundManager roundManager;
+
+        public float degreeToTargetX;
+        public float degreeToTargetY;
+
+        public bool targetMarked;
+
+        public float degreeToShootX;
+        public float degreeToShootY;
+
+        public bool targetShot;
+
+        public float degreeToTargetXCumulative;
+        public float degreeToShootXCumulative;
+
+        public float minAnlgeToEnemyCumulative;
+
+        public int tacticalReloadCountPerRound = 0;
+
         private void InitLayers()
         {
             InitAnimController();
@@ -277,11 +295,17 @@ namespace Demo.Scripts.Runtime
 
             playerTickLog.scorePerSec = new List<float>();
 
+            playerTickLog.playerRot = new List<Quaternion>();
+            playerTickLog.enemyPos = new List<Vector3>();
+
+            playerTickLog.isADS = new List<bool>();
+
             playerTickLog.time.Clear();
             playerTickLog.mouseX.Clear();
             playerTickLog.mouseY.Clear();
 
-            
+            targetMarked = false;
+            targetShot = false;
         }
 
         private void UnequipWeapon()
@@ -430,8 +454,13 @@ namespace Demo.Scripts.Runtime
                     shotsHitPerRound++;
                     score++;
                 }
-                else*/ if (hit.collider.gameObject.name == "Head")
+                else*/ 
+                if (hit.collider.gameObject.name == "Head")
                 {
+                    if (!targetShot)
+                    {
+                        targetShot = true;
+                    }
                     hit.collider.gameObject.GetComponentInParent<Enemy>().TakeDamage(GetGun().bulletDamage * 5);
                     headshotCooldown = .2f;
                     PlayHeadshotSFX();
@@ -626,7 +655,7 @@ namespace Demo.Scripts.Runtime
             slotLayer.PlayMotion(onLandedMotionAsset);
         }
 
-        private void TryReload()
+        private void TryReload(bool isAuto)
         {
             if (HasActiveAction()) return;
 
@@ -635,6 +664,8 @@ namespace Demo.Scripts.Runtime
 
             GetGun().currentAmmoCount = GetGun().magSize;
             realoadCountPerRound++;
+            if (!isAuto)
+                tacticalReloadCountPerRound++;
             if (isReloadSpikeEnabled)
             { gameManager.isEventBasedDelay = true;
                 perRoundReloadSpikeCount++;
@@ -711,7 +742,8 @@ namespace Demo.Scripts.Runtime
 
             if (Input.GetKeyDown(KeyCode.R))
             {
-                TryReload();
+                TryReload(false);
+
             }
 
             if (Input.GetKeyDown(KeyCode.G))
@@ -814,6 +846,8 @@ namespace Demo.Scripts.Runtime
             _playerInput.x = Mathf.Clamp(_playerInput.x, -90f, 90f);
             turnInput -= _playerInput.x;
 
+            //Debug.Log("Player input x:" + _playerInput.x);
+
             float sign = Mathf.Sign(_playerInput.x);
             if (Mathf.Abs(_playerInput.x) > turnInPlaceAngle)
             {
@@ -829,7 +863,7 @@ namespace Demo.Scripts.Runtime
 
                 isTurning = true;
             }
-
+            isTurning = true;
             transform.rotation *= Quaternion.Euler(0f, turnInput, 0f);
 
             float lastProgress = turnCurve.Evaluate(turnProgress);
@@ -866,7 +900,18 @@ namespace Demo.Scripts.Runtime
                 delXCumilative += Mathf.Abs(deltaMouseX);
                 delYCumilative += Mathf.Abs(deltaMouseY);
 
-                
+                if (!targetMarked)
+                {
+                    degreeToTargetX += Mathf.Abs(deltaMouseX);
+                    degreeToTargetY += Mathf.Abs(deltaMouseY);
+                }
+                if (!targetShot)
+                {
+                    degreeToShootX += Mathf.Abs(deltaMouseX);
+                    degreeToShootY += Mathf.Abs(deltaMouseY);
+                }
+
+
             }
 
             if(Mathf.Abs(deltaMouseX)>1.5 && isMouseMovementSpikeEnabled)
@@ -902,6 +947,7 @@ namespace Demo.Scripts.Runtime
 
             _playerInput.y = Mathf.Clamp(_playerInput.y, pitchClamp.x, pitchClamp.y);
             moveRotation *= Quaternion.Euler(0f, deltaMouseX, 0f);
+
             TurnInPlace();
 
             _jumpState = Mathf.Lerp(_jumpState, movementComponent.IsInAir() ? 1f : 0f,
@@ -915,8 +961,6 @@ namespace Demo.Scripts.Runtime
 
             charAnimData.SetAimInput(_playerInput);
             charAnimData.AddDeltaInput(new Vector2(deltaMouseX, charAnimData.deltaAimInput.y));
-
-
         }
 
         private Quaternion lastRotation;
@@ -1038,6 +1082,9 @@ namespace Demo.Scripts.Runtime
 
         void UpdatePlayerLog()
         {
+            GameObject enemy = GameObject.FindGameObjectWithTag("Enemy");
+
+
             playerTickLog.time.Add(System.DateTime.Now.ToString());
             playerTickLog.mouseX.Add(deltaMouseX);
             playerTickLog.mouseY.Add(deltaMouseY);
@@ -1049,6 +1096,18 @@ namespace Demo.Scripts.Runtime
             playerTickLog.scorePerSec.Add(score / (roundManager.roundDuration - roundManager.roundTimer));
 
             playerTickLog.roundTimer.Add((roundManager.roundDuration - roundManager.roundTimer));
+
+            playerTickLog.playerRot.Add(this.transform.rotation);
+            if(enemy != null) 
+                playerTickLog.enemyPos.Add(enemy.transform.position);
+            else
+                playerTickLog.enemyPos.Add(new Vector3(0,0,0));
+            playerTickLog.isADS.Add(IsAiming());
+
+            Debug.Log("Aim: " + degreeToTargetX + "  " +targetMarked);
+            Debug.Log("Shoot: " + degreeToShootX + "  " + targetShot);
+
+
         }
 
         void UpdateCooldowns()
@@ -1063,7 +1122,7 @@ namespace Demo.Scripts.Runtime
                 headshotCooldown -= Time.deltaTime;
 
             if (GetGun().currentAmmoCount <= 0)
-                TryReload();
+                TryReload(true);
 
             if(mouseSpikeCooldown > 0)
                 mouseSpikeCooldown -= Time.deltaTime;
@@ -1086,9 +1145,7 @@ namespace Demo.Scripts.Runtime
 
         public void UpdateReticle()
         {
-
-            //Debug.Log(Input.GetAxis("Mouse X"));
-
+            
             Transform muzzlePointTransform = GetGun().shootPoint.transform;
             Vector3 targetPoint = muzzlePointTransform.position + muzzlePointTransform.TransformDirection(Vector3.forward);
             Vector3 directionWithoutSpread = targetPoint - muzzlePointTransform.position;
@@ -1124,6 +1181,11 @@ namespace Demo.Scripts.Runtime
             else
             {
                 enemyAimedFuse = false;
+            }
+
+            if (hit.collider != null &&  hit.collider.gameObject.name == "Head")
+            {
+                targetMarked = true;
             }
         }
 
@@ -1165,6 +1227,7 @@ namespace Demo.Scripts.Runtime
             playerAudioSource.pitch = UnityEngine.Random.Range(0.95f, 1.05f);
 
             playerAudioSource.PlayOneShot(killSFX);
+            targetShot = false;
         }
 
         void PlayHeadshotSFX()
@@ -1178,7 +1241,6 @@ namespace Demo.Scripts.Runtime
         public void PlayDeathSFX()
         {
             playerAudioSource.pitch = UnityEngine.Random.Range(0.95f, 1.05f);
-
             playerAudioSource.PlayOneShot(deathSFX);
         }
 
@@ -1197,6 +1259,8 @@ namespace Demo.Scripts.Runtime
             GetGun().currentAmmoCount = GetGun().magSize;
 
             deathTimeOut = 1.5f;
+            targetMarked = false;
+            targetShot = false;
         }
 
 
@@ -1226,10 +1290,22 @@ namespace Demo.Scripts.Runtime
             delXCumilative = 0;
             delYCumilative = 0;
             realoadCountPerRound = 0;
+            tacticalReloadCountPerRound = 0;
             perRoundMouseMovementSpikeCount = 0;
             perRoundAimSpikeCount = 0;
             perRoundReloadSpikeCount = 0;
             perRoundEnemySpawnSpikeCount = 0;
+
+            degreeToTargetXCumulative = 0;
+            degreeToShootXCumulative = 0;
+            minAnlgeToEnemyCumulative = 0;
+            degreeToShootX = 0;
+            degreeToShootY = 0;
+            degreeToTargetX = 0;
+            degreeToTargetY = 0;
+
+            targetMarked = false;
+            targetShot = false;
 
             playerTickLog.time.Clear();
             playerTickLog.mouseX.Clear();
@@ -1241,6 +1317,11 @@ namespace Demo.Scripts.Runtime
 
             playerTickLog.scorePerSec.Clear();
             playerTickLog.roundTimer.Clear();
+
+            playerTickLog.playerRot.Clear();
+            playerTickLog.enemyPos.Clear();
+            playerTickLog.isADS.Clear();
+
         }
     }
 }
