@@ -359,7 +359,7 @@ public class GameUI : MonoBehaviour
             string filename = "Data\\Configs\\SessionID.csv";
 
             while (textWriter == null)
-                textWriter = File.AppendText(filename);
+                textWriter = File.CreateText(filename);
 
             roundManager.sessionID++;
 
