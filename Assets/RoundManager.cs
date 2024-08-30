@@ -300,6 +300,7 @@ public class RoundManager : MonoBehaviour
     {
         roundTimer = roundDuration;
         gameManager.isFixedFT = false;
+        
 
         Application.targetFrameRate = (int)roundConfigs.roundFPS[indexArray[currentRoundNumber - 1]];
 
@@ -308,6 +309,8 @@ public class RoundManager : MonoBehaviour
         playerController.isReloadSpikeEnabled = roundConfigs.onReloadSpikeEnabled[indexArray[currentRoundNumber - 1]];
         playerController.isMouseMovementSpikeEnabled = roundConfigs.onMouseSpikeEnabled[indexArray[currentRoundNumber - 1]];
         playerController.isEnemySpawnSpikeEnabled = roundConfigs.onEnemySpawnSpikeEnabled[indexArray[currentRoundNumber - 1]];
+
+        gameManager.delayDuration = roundConfigs.spikeMagnitude[indexArray[currentRoundNumber - 1]];
 
         roundFrameCount = 0;
         frametimeCumulativeRound = 0;

@@ -86,7 +86,9 @@ public class GameManager : MonoBehaviour
             if (ElapsedNanoseconds(frameStartTime) >= delayDuration * 1000000)
             {
                 isEventBasedDelay = false;
-                delayDurationIndex++;
+
+
+                /*delayDurationIndex++;
 
                 if(delayDurationIndex >= delayDurationList.Count)
                 {
@@ -95,7 +97,7 @@ public class GameManager : MonoBehaviour
                 else
                 {
                      delayDuration = delayDurationList[delayDurationIndex];
-                }
+                }*/
 
                 return;
             }
