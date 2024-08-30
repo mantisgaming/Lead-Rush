@@ -23,13 +23,17 @@ public class Enemy : MonoBehaviour
 
     public ParticleSystem explodePE;
 
-    public CapsuleCollider largeCollider;
+    public SphereCollider largeCollider;
 
     public Transform headTransform;
 
     public float minAngleToPlayer;
 
     public GameObject manager;
+
+    public GameObject enemyHead;
+
+    public float angularSizeOnSpawn;
 
 
 
@@ -47,7 +51,7 @@ public class Enemy : MonoBehaviour
 
         var forward = player.transform.forward;
         minAngleToPlayer = Vector3.Angle(relativePos, forward);
-
+        angularSizeOnSpawn = playerController.CalculateAngularSize(enemyHead, playerController.mainCamera.position);
     }
 
     // Update is called once per frame
@@ -57,11 +61,13 @@ public class Enemy : MonoBehaviour
             return;
         enemyAgent.destination = player.transform.position;
 
-       
+        //float angularSize =  playerController.CalculateAngularSize(enemyHead, playerController.mainCamera.position);
 
-        largeCollider.transform.localScale = new Vector3(1.5F + Mathf.PingPong(Time.time, 1.0f),1,1);
+        //Debug.Log("Angular size: " + angularSize);
 
-        Debug.Log("Min: " + minAngleToPlayer);
+        largeCollider.transform.localScale = new Vector3(2F + Mathf.PingPong(Time.time, 1.0f),1,1);
+
+        //Debug.Log("Min: " + minAngleToPlayer);
     }
 
     public void TakeDamage(float damage)
@@ -129,6 +135,7 @@ public class Enemy : MonoBehaviour
                roundManager.indexArray[roundManager.currentRoundNumber - 1].ToString() + "," +
            currentHealth.ToString() + "," +
            minAngleToPlayer.ToString() + "," +
+           angularSizeOnSpawn.ToString() + "," +
            fPSController.degreeToTargetX.ToString() + "," +
            fPSController.degreeToTargetY.ToString() + "," +
            fPSController.degreeToShootX.ToString() + "," +
@@ -144,7 +151,4 @@ public class Enemy : MonoBehaviour
         fPSController.degreeToShootX = 0;
         fPSController.degreeToShootY = 0;
     }
-
-    
-   
 }

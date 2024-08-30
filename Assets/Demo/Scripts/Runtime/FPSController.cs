@@ -85,7 +85,7 @@ namespace Demo.Scripts.Runtime
         [SerializeField, Min(0f)] private float equipDelay = 0f;
 
         [Header("Camera")]
-        [SerializeField] private Transform mainCamera;
+        [SerializeField] public Transform mainCamera;
         [SerializeField] private Transform cameraHolder;
         [SerializeField] private Transform firstPersonCamera;
         [SerializeField] private float sensitivity;
@@ -1104,10 +1104,8 @@ namespace Demo.Scripts.Runtime
                 playerTickLog.enemyPos.Add(new Vector3(0,0,0));
             playerTickLog.isADS.Add(IsAiming());
 
-            Debug.Log("Aim: " + degreeToTargetX + "  " +targetMarked);
-            Debug.Log("Shoot: " + degreeToShootX + "  " + targetShot);
-
-
+            //Debug.Log("Aim: " + degreeToTargetX + "  " +targetMarked);
+            //Debug.Log("Shoot: " + degreeToShootX + "  " + targetShot);
         }
 
         void UpdateCooldowns()
@@ -1175,8 +1173,6 @@ namespace Demo.Scripts.Runtime
                     perRoundAimSpikeCount++;
                 }
                 enemyAimedFuse = true;
-
-
             }
             else
             {
@@ -1262,8 +1258,7 @@ namespace Demo.Scripts.Runtime
             targetMarked = false;
             targetShot = false;
         }
-
-
+        
         public void ResetPlayerAndDestroyEnemy()
         {
             movementComponent.enabled = false;
@@ -1322,6 +1317,28 @@ namespace Demo.Scripts.Runtime
             playerTickLog.enemyPos.Clear();
             playerTickLog.isADS.Clear();
 
+        }
+
+        // This function calculates the angular size (in degrees) of a sphere as seen from a reference point.
+        public float CalculateAngularSize(GameObject sphere, Vector3 referencePoint)
+        {
+            // Get the sphere's position
+            Vector3 spherePosition = sphere.transform.position;
+
+            // Calculate the sphere's diameter using its scale (assuming it's a uniform scale sphere)
+            float sphereDiameter = sphere.transform.localScale.x; // Assuming the sphere is uniformly scaled
+
+            // Calculate the horizontal distance from the reference point to the sphere's center
+            Vector3 horizontalVector = new Vector3(spherePosition.x - referencePoint.x, 0, spherePosition.z - referencePoint.z);
+            float horizontalDistanceToSphere = horizontalVector.magnitude;
+
+            // Calculate the angular size in radians using horizontal distance
+            float angularSizeInRadians = 2 * Mathf.Atan(sphereDiameter / (2 * horizontalDistanceToSphere));
+
+            // Convert the angular size to degrees
+            float angularSizeInDegrees = angularSizeInRadians * Mathf.Rad2Deg;
+
+            return angularSizeInDegrees;
         }
     }
 }
