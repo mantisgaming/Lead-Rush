@@ -3,8 +3,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Windows;
 
 [System.Serializable]
 public struct RoundConfigs
@@ -30,7 +30,7 @@ public struct PlayerTickLog
     public List<float> playerZ;
 
     public List<Quaternion> playerRot;
-    
+
     public List<Vector3> enemyPos;
     public List<bool> isADS;
 
@@ -68,7 +68,7 @@ public class RoundManager : MonoBehaviour
 
     public int sessionID = -1;
 
-   public bool isFTStudy;
+    public bool isFTStudy;
 
     // Start is called before the first frame update
     void Start()
@@ -124,7 +124,7 @@ public class RoundManager : MonoBehaviour
     void Update()
     {
         if (roundTimer > 0 && playerController.isPlayerReady && playerController.isQoeDisabled)
-        { 
+        {
             roundTimer -= Time.deltaTime;
             frametimeCumulativeRound += Time.deltaTime;
             roundFrameCount++;
@@ -185,7 +185,7 @@ public class RoundManager : MonoBehaviour
             }
         }
 
-        
+
 
         line = null;
         strReader = new StreamReader("Data\\Configs\\LatinSquare.csv");
@@ -227,9 +227,9 @@ public class RoundManager : MonoBehaviour
         }
         else
         {
-            //Practice round
+            //Practice round single for FT study
             roundConfigs.roundFPS.Add(500);
-            roundConfigs.spikeMagnitude.Add(100);
+            roundConfigs.spikeMagnitude.Add(0);
             roundConfigs.onAimSpikeEnabled.Add(false);
             roundConfigs.onReloadSpikeEnabled.Add(false);
             roundConfigs.onMouseSpikeEnabled.Add(false);
@@ -256,9 +256,29 @@ public class RoundManager : MonoBehaviour
     public void ReadFTStudyCSV()
     {
         string line = null;
-        StreamReader strReader = new StreamReader("Data\\Configs\\RoundConfig.csv");
+        StreamReader strReader = new StreamReader("Data\\Configs\\LatinMap.csv");
         bool EOF = false;
-        roundConfigs.roundFPS.Clear();
+        List<string> latinMap = new List<string>();
+
+        while (!EOF)
+        {
+
+            if (line == null)
+            {
+                EOF = true;
+                break;
+            }
+            else
+            {
+                latinMap.Add(strReader.ReadLine());
+            }
+        }
+
+        line = null;
+        strReader = new StreamReader("Data\\Configs\\SessionID.csv");
+        EOF = false;
+
+        sessionID = -1;
 
         while (!EOF)
         {
@@ -272,14 +292,50 @@ public class RoundManager : MonoBehaviour
             else
             {
                 var dataValues = line.Split(',');
-                Debug.Log(dataValues[1]);
-                roundConfigs.roundFPS.Add(float.Parse(dataValues[0]));
-                roundConfigs.spikeMagnitude.Add(float.Parse(dataValues[1]));
-                roundConfigs.onAimSpikeEnabled.Add(bool.Parse(dataValues[2]));
-                roundConfigs.onReloadSpikeEnabled.Add(bool.Parse(dataValues[3]));
-                roundConfigs.onMouseSpikeEnabled.Add(bool.Parse(dataValues[4]));
-                roundConfigs.onEnemySpawnSpikeEnabled.Add(bool.Parse(dataValues[5]));
+                sessionID = int.Parse(dataValues[0]);
             }
+        }
+
+
+        line = null;
+        strReader = new StreamReader("Data\\Configs\\RoundConfig.csv");
+        EOF = false;
+        roundConfigs.roundFPS.Clear();
+
+        int index = 1;
+
+        while (!EOF)
+        {
+            line = strReader.ReadLine();
+
+            if (line == null)
+            {
+                EOF = true;
+                break;
+            }
+            else
+            {
+                var configVals = line.Split(',');
+
+                if (index == sessionID)
+
+                {
+                    for (int i = 0; i < configVals.Length; i++)
+                    {
+                        string config = latinMap[Int32.Parse(configVals[i]) - 1];
+                        var dataValues = config.Split(',');
+
+                        Debug.Log(dataValues[1]);
+                        roundConfigs.roundFPS.Add(float.Parse(dataValues[0]));
+                        roundConfigs.spikeMagnitude.Add(float.Parse(dataValues[1]));
+                        roundConfigs.onAimSpikeEnabled.Add(bool.Parse(dataValues[2]));
+                        roundConfigs.onReloadSpikeEnabled.Add(bool.Parse(dataValues[3]));
+                        roundConfigs.onMouseSpikeEnabled.Add(bool.Parse(dataValues[4]));
+                        roundConfigs.onEnemySpawnSpikeEnabled.Add(bool.Parse(dataValues[5]));
+                    }
+                }
+            }
+            index++;
         }
     }
 
@@ -300,7 +356,7 @@ public class RoundManager : MonoBehaviour
     {
         roundTimer = roundDuration;
         gameManager.isFixedFT = false;
-        
+
 
         Application.targetFrameRate = (int)roundConfigs.roundFPS[indexArray[currentRoundNumber - 1]];
 
@@ -325,7 +381,7 @@ public class RoundManager : MonoBehaviour
         filenamePerRound = "Data\\Logs\\RoundData_" + fileNameSuffix + "_" + sessionID + "_" + ".csv";
 
         while (textWriter == null)
-            textWriter = File.AppendText(filenamePerRound);
+            textWriter = System.IO.File.AppendText(filenamePerRound);
 
         float accuracy = 0;
         if (playerController.shotsFiredPerRound > 0)
@@ -388,9 +444,9 @@ public class RoundManager : MonoBehaviour
         PlayerStats stats = playerController.gameObject.GetComponent<PlayerStats>();
 
         TextWriter textWriter = null;
-        filenamePerRound = "Data\\Logs\\PlayerData_" + fileNameSuffix + "_" +sessionID + "_" + ".csv";
+        filenamePerRound = "Data\\Logs\\PlayerData_" + fileNameSuffix + "_" + sessionID + "_" + ".csv";
         while (textWriter == null)
-            textWriter = File.AppendText(filenamePerRound);
+            textWriter = System.IO.File.AppendText(filenamePerRound);
 
         for (int i = 0; i < playerController.playerTickLog.mouseX.Count; i++)
         {
