@@ -156,6 +156,9 @@ public class RoundManager : MonoBehaviour
                 var dataValues = line.Split(',');
                 roundDuration = float.Parse(dataValues[0]);
                 isFTStudy = bool.Parse(dataValues[1]);
+                playerController.aimSpikeDelay = float.Parse(dataValues[2]);
+                playerController.mouseSpikeDelay = float.Parse(dataValues[3]);
+                playerController.mouseSpikeDegreeOfMovement = float.Parse(dataValues[4]);
             }
         }
     }

@@ -40,7 +40,7 @@ namespace Demo.Scripts.Runtime
         Reloading,
         WeaponChange
     }
-    
+
 
     // An example-controller class
     public class FPSController : FPSAnimController
@@ -183,6 +183,10 @@ namespace Demo.Scripts.Runtime
         public bool isEnemySpawnSpikeEnabled;
 
         float mouseSpikeCooldown;
+        public float mouseSpikeDelay;
+        public float mouseSpikeDegreeOfMovement;
+        public float aimSpikeDelay;
+        float aimSpikeCooldown;
 
         bool enemyAimedFuse;
 
@@ -233,7 +237,7 @@ namespace Demo.Scripts.Runtime
             swayLayer = GetComponentInChildren<SwayLayer>();
             slotLayer = GetComponentInChildren<SlotLayer>();
             collisionLayer = GetComponentInChildren<WeaponCollision>();
-            
+
         }
 
         private bool HasActiveAction()
@@ -458,7 +462,7 @@ namespace Demo.Scripts.Runtime
                     shotsHitPerRound++;
                     score++;
                 }
-                else*/ 
+                else*/
                 if (hit.collider.gameObject.name == "Head")
                 {
                     if (!targetShot)
@@ -671,7 +675,8 @@ namespace Demo.Scripts.Runtime
             if (!isAuto)
                 tacticalReloadCountPerRound++;
             if (isReloadSpikeEnabled)
-            { gameManager.isEventBasedDelay = true;
+            {
+                gameManager.isEventBasedDelay = true;
                 perRoundReloadSpikeCount++;
             }
 
@@ -790,7 +795,7 @@ namespace Demo.Scripts.Runtime
                 if (Input.GetKeyUp(KeyCode.Mouse0))
                 {
                     OnFireReleased();
-                    if(clickToPhotonIMG.isActiveAndEnabled)
+                    if (clickToPhotonIMG.isActiveAndEnabled)
                         clickToPhotonIMG.color = new UnityEngine.Color(.2f, .2f, .2f, 1f);
                 }
 
@@ -891,8 +896,8 @@ namespace Demo.Scripts.Runtime
 
         private void UpdateLookInput()
         {
-             deltaMouseX = 0;
-             deltaMouseY = 0;
+            deltaMouseX = 0;
+            deltaMouseY = 0;
             //UpdateReticle();
             if (isPlayerReady && isQoeDisabled)
             {
@@ -918,15 +923,15 @@ namespace Demo.Scripts.Runtime
 
             }
 
-            if(Mathf.Abs(deltaMouseX)>1.5 && isMouseMovementSpikeEnabled)
+            if (Mathf.Abs(deltaMouseX) > mouseSpikeDegreeOfMovement && isMouseMovementSpikeEnabled)
             {
                 if (mouseSpikeCooldown <= 0)
-                { 
+                {
                     gameManager.isEventBasedDelay = true;
-                    mouseSpikeCooldown = 1.0f;
+                    mouseSpikeCooldown = mouseSpikeDelay;
                     perRoundMouseMovementSpikeCount++;
                 }
-            }    
+            }
 
             if (_freeLook)
             {
@@ -1083,7 +1088,7 @@ namespace Demo.Scripts.Runtime
             distanceTravelledPerRound += distanceVector.magnitude;
             oldPosition = transform.position;
 
-            if(aimState == FPSAimState.Aiming)
+            if (aimState == FPSAimState.Aiming)
             {
                 aimDurationPerRound += Time.deltaTime;
             }
@@ -1107,10 +1112,10 @@ namespace Demo.Scripts.Runtime
             playerTickLog.roundTimer.Add((roundManager.roundDuration - roundManager.roundTimer));
 
             playerTickLog.playerRot.Add(this.transform.rotation);
-            if(enemy != null) 
+            if (enemy != null)
                 playerTickLog.enemyPos.Add(enemy.transform.position);
             else
-                playerTickLog.enemyPos.Add(new Vector3(0,0,0));
+                playerTickLog.enemyPos.Add(new Vector3(0, 0, 0));
             playerTickLog.isADS.Add(IsAiming());
 
             //Debug.Log("Aim: " + degreeToTargetX + "  " +targetMarked);
@@ -1131,8 +1136,11 @@ namespace Demo.Scripts.Runtime
             if (GetGun().currentAmmoCount <= 0)
                 TryReload(true);
 
-            if(mouseSpikeCooldown > 0)
+            if (mouseSpikeCooldown > 0)
                 mouseSpikeCooldown -= Time.deltaTime;
+
+            if (aimSpikeCooldown > 0)
+                aimSpikeCooldown -= Time.deltaTime;
         }
 
         public void UpdateCameraRotation()
@@ -1152,7 +1160,7 @@ namespace Demo.Scripts.Runtime
 
         public void UpdateReticle()
         {
-            
+
             Transform muzzlePointTransform = GetGun().shootPoint.transform;
             Vector3 targetPoint = muzzlePointTransform.position + muzzlePointTransform.TransformDirection(Vector3.forward);
             Vector3 directionWithoutSpread = targetPoint - muzzlePointTransform.position;
@@ -1174,12 +1182,13 @@ namespace Demo.Scripts.Runtime
                 enemyAimedFuse = false;
             }
             RaycastHit largeColliderHit;
-            if ( isAimSpikeEnabled && Physics.Raycast(muzzlePointTransform.position, directionWithoutSpread, out largeColliderHit, Mathf.Infinity, enemyLargeColliderLayer))
+            if (isAimSpikeEnabled && Physics.Raycast(muzzlePointTransform.position, directionWithoutSpread, out largeColliderHit, Mathf.Infinity, enemyLargeColliderLayer))
             {
-                if (enemyAimedFuse == false)
-                { gameManager.isEventBasedDelay = true;
-
+                if (enemyAimedFuse == false && aimSpikeCooldown<=0)
+                {
+                    gameManager.isEventBasedDelay = true;
                     perRoundAimSpikeCount++;
+                    aimSpikeCooldown = aimSpikeDelay;
                 }
                 enemyAimedFuse = true;
             }
@@ -1188,7 +1197,7 @@ namespace Demo.Scripts.Runtime
                 enemyAimedFuse = false;
             }
 
-            if (hit.collider != null &&  hit.collider.gameObject.name == "Head")
+            if (hit.collider != null && hit.collider.gameObject.name == "Head")
             {
                 targetMarked = true;
             }
@@ -1267,7 +1276,7 @@ namespace Demo.Scripts.Runtime
             targetMarked = false;
             targetShot = false;
         }
-        
+
         public void ResetPlayerAndDestroyEnemy()
         {
             movementComponent.enabled = false;
@@ -1320,7 +1329,7 @@ namespace Demo.Scripts.Runtime
 
             playerTickLog.playerX.Clear();
             playerTickLog.playerY.Clear();
-            playerTickLog.playerZ.Clear();  
+            playerTickLog.playerZ.Clear();
 
             playerTickLog.scorePerSec.Clear();
             playerTickLog.roundTimer.Clear();
