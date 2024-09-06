@@ -75,13 +75,15 @@ public class Enemy : MonoBehaviour
         currentHealth-=damage;
         if(currentHealth < 0)
         {
-            EnemyLog();
-
             FPSController fPSController = player.GetComponent<FPSController>();
 
             fPSController.degreeToTargetXCumulative += fPSController.degreeToTargetX;
             fPSController.degreeToShootXCumulative += fPSController.degreeToShootX;
             fPSController.minAnlgeToEnemyCumulative += minAngleToPlayer;
+            fPSController.enemySizeCumulative += angularSizeOnSpawn;
+
+            EnemyLog();
+            
             fPSController.killCooldown = .3f;
             fPSController.targetMarked = false;
             fPSController.targetShot = false;

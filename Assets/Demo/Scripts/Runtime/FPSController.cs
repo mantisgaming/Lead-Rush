@@ -214,9 +214,13 @@ namespace Demo.Scripts.Runtime
         public float degreeToTargetXCumulative;
         public float degreeToShootXCumulative;
 
+        public float enemySizeCumulative;
+
         public float minAnlgeToEnemyCumulative;
 
         public int tacticalReloadCountPerRound = 0;
+
+        public float aimDurationPerRound;
 
         private void InitLayers()
         {
@@ -1078,6 +1082,11 @@ namespace Demo.Scripts.Runtime
             Vector3 distanceVector = transform.position - oldPosition;
             distanceTravelledPerRound += distanceVector.magnitude;
             oldPosition = transform.position;
+
+            if(aimState == FPSAimState.Aiming)
+            {
+                aimDurationPerRound += Time.deltaTime;
+            }
         }
 
         void UpdatePlayerLog()
@@ -1294,10 +1303,13 @@ namespace Demo.Scripts.Runtime
             degreeToTargetXCumulative = 0;
             degreeToShootXCumulative = 0;
             minAnlgeToEnemyCumulative = 0;
+
+            enemySizeCumulative = 0;
             degreeToShootX = 0;
             degreeToShootY = 0;
             degreeToTargetX = 0;
             degreeToTargetY = 0;
+            aimDurationPerRound = 0;
 
             targetMarked = false;
             targetShot = false;

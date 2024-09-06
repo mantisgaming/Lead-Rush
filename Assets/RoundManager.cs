@@ -389,8 +389,9 @@ public class RoundManager : MonoBehaviour
             accuracy = (float)playerController.shotsHitPerRound / (float)playerController.shotsFiredPerRound;
         }
 
-        float degXTargetAvg = playerController.degreeToTargetXCumulative / playerController.roundKills;
-        float degXShootAvg = playerController.degreeToShootXCumulative / playerController.roundKills;
+        float degXTargetAvg = (float)playerController.degreeToTargetXCumulative / (float)playerController.roundKills;
+        float degXShootAvg = (float)playerController.degreeToShootXCumulative / (float)playerController.roundKills;
+        float enemySizeOnSpawnAvg = (float)playerController.enemySizeCumulative / (float)playerController.roundKills;
 
         double avgFT = frametimeCumulativeRound / roundFrameCount;
         double avgFPS = 1 / avgFT;
@@ -431,8 +432,11 @@ public class RoundManager : MonoBehaviour
            playerController.degreeToShootXCumulative.ToString() + "," +
            playerController.degreeToTargetXCumulative.ToString() + "," +
            playerController.minAnlgeToEnemyCumulative.ToString() + "," +
+           playerController.enemySizeCumulative.ToString() + "," +
            degXShootAvg.ToString() + "," +
            degXTargetAvg.ToString() + "," +
+           enemySizeOnSpawnAvg.ToString() + "," +
+           playerController.aimDurationPerRound.ToString() + "," +
            qoeValue.ToString()
             ;
         textWriter.WriteLine(roundLogLine);
