@@ -727,7 +727,7 @@ namespace Demo.Scripts.Runtime
 
             if (Input.GetKeyDown(KeyCode.F))
             {
-                ChangeWeapon_Internal(_currentWeaponIndex + 1 > weapons.Count - 1 ? 0 : _currentWeaponIndex + 1);
+                //ChangeWeapon_Internal(_currentWeaponIndex + 1 > weapons.Count - 1 ? 0 : _currentWeaponIndex + 1);
                 return;
             }
 
@@ -735,7 +735,7 @@ namespace Demo.Scripts.Runtime
             {
                 if (Input.GetKeyDown((KeyCode)i))
                 {
-                    ChangeWeapon_Internal(i - (int)KeyCode.Alpha1);
+                    //ChangeWeapon_Internal(i - (int)KeyCode.Alpha1); //weapon change blocked
                 }
             }
         }
