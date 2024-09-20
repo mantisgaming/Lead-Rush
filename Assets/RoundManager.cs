@@ -198,8 +198,8 @@ public class RoundManager : MonoBehaviour
         if (!isFTStudy)
         {
             //Practice
-            roundConfigs.roundFPS.Add(500);
-            roundConfigs.roundFPS.Add(7);
+            //roundConfigs.roundFPS.Add(500);
+            //roundConfigs.roundFPS.Add(7);
 
             while (!EOF)
             {
