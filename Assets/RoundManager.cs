@@ -399,6 +399,10 @@ public class RoundManager : MonoBehaviour
         float degXShootAvg = (float)playerController.degreeToShootXCumulative / (float)playerController.roundKills;
         float enemySizeOnSpawnAvg = (float)playerController.enemySizeCumulative / (float)playerController.roundKills;
 
+        float timeToTargetAvg = (float)playerController.timeToTargetEnemyCumulative / (float)playerController.roundKills;
+        float timeToHitAvg = (float)playerController.timeToHitEnemyCumulative / (float)playerController.roundKills;
+        float timeToKillAvg = (float)playerController.timeToKillEnemyCumulative / (float)playerController.roundKills;
+
         double avgFT = frametimeCumulativeRound / roundFrameCount;
         double avgFPS = 1 / avgFT;
 
@@ -439,6 +443,9 @@ public class RoundManager : MonoBehaviour
            playerController.degreeToTargetXCumulative.ToString() + "," +
            playerController.minAnlgeToEnemyCumulative.ToString() + "," +
            playerController.enemySizeCumulative.ToString() + "," +
+           playerController.timeToTargetEnemyCumulative.ToString() + "," +
+           playerController.timeToHitEnemyCumulative.ToString() + "," +
+           playerController.timeToKillEnemyCumulative.ToString() + "," +
            degXShootAvg.ToString() + "," +
            degXTargetAvg.ToString() + "," +
            enemySizeOnSpawnAvg.ToString() + "," +

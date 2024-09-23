@@ -84,6 +84,11 @@ public class Enemy : MonoBehaviour
 
             fPSController.degreeToTargetXCumulative += fPSController.degreeToTargetX;
             fPSController.degreeToShootXCumulative += fPSController.degreeToShootX;
+
+            fPSController.timeToTargetEnemyCumulative += fPSController.timeToTargetEnemy;
+            fPSController.timeToHitEnemyCumulative += fPSController.timeToHitEnemy;
+            fPSController.timeToKillEnemyCumulative += fPSController.timeToKillEnemy;
+
             fPSController.minAnlgeToEnemyCumulative += minAngleToPlayer;
             fPSController.enemySizeCumulative += angularSizeOnSpawn;
 
@@ -147,6 +152,9 @@ public class Enemy : MonoBehaviour
            fPSController.degreeToTargetY.ToString() + "," +
            fPSController.degreeToShootX.ToString() + "," +
            fPSController.degreeToShootY.ToString() + "," +
+           fPSController.timeToTargetEnemy.ToString() + "," +
+           fPSController.timeToHitEnemy.ToString() + "," +
+           fPSController.timeToKillEnemy.ToString() + "," +
            fPSController.targetMarked.ToString() + "," +
            fPSController.targetShot.ToString()
             ;
@@ -157,5 +165,9 @@ public class Enemy : MonoBehaviour
         fPSController.degreeToTargetY = 0;
         fPSController.degreeToShootX = 0;
         fPSController.degreeToShootY = 0;
+
+        fPSController.timeToKillEnemy = 0;
+        fPSController.timeToHitEnemy = 0;
+        fPSController.timeToTargetEnemy = 0;
     }
 }

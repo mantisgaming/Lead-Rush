@@ -1,17 +1,13 @@
 // Designed by KINEMATION, 2023
 
-using System;
 using Kinemation.FPSFramework.Runtime.FPSAnimator;
 using Kinemation.FPSFramework.Runtime.Layers;
 using Kinemation.FPSFramework.Runtime.Recoil;
-
-using UnityEngine;
+using System;
 using System.Collections.Generic;
-using Random = UnityEngine.Random;
-using UnityEngine.Audio;
-using Unity.Mathematics;
-using System.Drawing;
+using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 namespace Demo.Scripts.Runtime
 {
@@ -217,6 +213,14 @@ namespace Demo.Scripts.Runtime
 
         public float degreeToTargetXCumulative;
         public float degreeToShootXCumulative;
+
+        public float timeToTargetEnemy;
+        public float timeToHitEnemy;
+        public float timeToKillEnemy;
+
+        public float timeToTargetEnemyCumulative;
+        public float timeToHitEnemyCumulative;
+        public float timeToKillEnemyCumulative;
 
         public float enemySizeCumulative;
 
@@ -921,13 +925,15 @@ namespace Demo.Scripts.Runtime
                 {
                     degreeToTargetX += Mathf.Abs(deltaMouseX);
                     degreeToTargetY += Mathf.Abs(deltaMouseY);
+                    timeToTargetEnemy += Time.deltaTime;
                 }
                 if (!targetShot)
                 {
                     degreeToShootX += Mathf.Abs(deltaMouseX);
                     degreeToShootY += Mathf.Abs(deltaMouseY);
+                    timeToHitEnemy += Time.deltaTime;
                 }
-
+                timeToKillEnemy += Time.deltaTime;
 
             }
 
@@ -1320,6 +1326,10 @@ namespace Demo.Scripts.Runtime
             degreeToTargetXCumulative = 0;
             degreeToShootXCumulative = 0;
             minAnlgeToEnemyCumulative = 0;
+
+            timeToTargetEnemyCumulative = 0;
+            timeToHitEnemyCumulative = 0;
+            timeToKillEnemyCumulative = 0;
 
             enemySizeCumulative = 0;
             degreeToShootX = 0;
