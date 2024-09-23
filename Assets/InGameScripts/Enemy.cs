@@ -43,8 +43,11 @@ public class Enemy : MonoBehaviour
         enemyAgent = gameObject.GetComponent<NavMeshAgent>();
         player = GameObject.FindGameObjectWithTag("Player");
         manager = GameObject.FindGameObjectWithTag("Manager");
-        currentHealth = maxHealth;
         playerController = player.GetComponent<FPSController>();
+
+        maxHealth = playerController.enemyHealthGlobal;
+        currentHealth = maxHealth;
+        
 
 
         var relativePos = this.transform.position - player.transform.position;
@@ -52,6 +55,8 @@ public class Enemy : MonoBehaviour
         var forward = player.transform.forward;
         minAngleToPlayer = Vector3.Angle(relativePos, forward);
         angularSizeOnSpawn = playerController.CalculateAngularSize(enemyHead, playerController.mainCamera.position);
+
+        enemyAgent.speed = playerController.enemySpeedGlobal;
     }
 
     // Update is called once per frame

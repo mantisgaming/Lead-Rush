@@ -226,6 +226,12 @@ namespace Demo.Scripts.Runtime
 
         public float aimDurationPerRound;
 
+        public float enemySpeedGlobal;
+
+        public float reticleSizeMultiplier;
+
+        public float enemyHealthGlobal;
+
         private void InitLayers()
         {
             InitAnimController();
@@ -314,6 +320,8 @@ namespace Demo.Scripts.Runtime
 
             targetMarked = false;
             targetShot = false;
+
+
         }
 
         private void UnequipWeapon()
@@ -1172,7 +1180,7 @@ namespace Demo.Scripts.Runtime
 
                 float distanceToReticle = Vector3.Distance(muzzlePointTransform.position, hit.point);
 
-                reticleObject.transform.localScale = new Vector3(1, 1, 1) * (0.007f + distanceToReticle / 200);
+                reticleObject.transform.localScale = new Vector3(reticleSizeMultiplier, reticleSizeMultiplier, reticleSizeMultiplier) * (0.007f + distanceToReticle / 200) ;
 
 
             }

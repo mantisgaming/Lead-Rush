@@ -159,6 +159,9 @@ public class RoundManager : MonoBehaviour
                 playerController.aimSpikeDelay = float.Parse(dataValues[2]);
                 playerController.mouseSpikeDelay = float.Parse(dataValues[3]);
                 playerController.mouseSpikeDegreeOfMovement = float.Parse(dataValues[4]);
+                playerController.enemySpeedGlobal = float.Parse(dataValues[5]);
+                playerController.enemyHealthGlobal = float.Parse(dataValues[6]);
+                playerController.reticleSizeMultiplier = float.Parse(dataValues[7]);
             }
         }
     }
@@ -198,8 +201,8 @@ public class RoundManager : MonoBehaviour
         if (!isFTStudy)
         {
             //Practice
-            //roundConfigs.roundFPS.Add(500);
-            //roundConfigs.roundFPS.Add(7);
+            roundConfigs.roundFPS.Add(500);
+            roundConfigs.roundFPS.Add(7);
 
             while (!EOF)
             {
