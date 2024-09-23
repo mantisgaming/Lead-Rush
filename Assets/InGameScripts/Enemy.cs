@@ -101,7 +101,7 @@ public class Enemy : MonoBehaviour
             Instantiate(deathPE, headTransform.position, headTransform.rotation);
             //Destroy the Instantiated ParticleSystem 
 
-            fPSController.score += 100;
+            fPSController.score += fPSController.onKillScore;
             fPSController.roundKills++;
 
             Destroy(gameObject);

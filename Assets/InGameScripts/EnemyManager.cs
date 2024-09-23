@@ -64,7 +64,7 @@ public class EnemyManager : MonoBehaviour
 
     public GameObject GetClosestEnemy()
     {
-        float minDist = 9999999;
+        /*float minDist = 9999999;
         GameObject closestEnemyGO = null;
 
 
@@ -75,8 +75,8 @@ public class EnemyManager : MonoBehaviour
                 minDist = Vector3.Distance(player.transform.position, enemy.transform.position);
                 closestEnemyGO = enemy;
             }
-        }
-        return closestEnemyGO;
+        }*/
+        return GameObject.FindGameObjectWithTag("Enemy");
     }
 
     void SpawnEnemy()

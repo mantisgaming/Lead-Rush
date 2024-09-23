@@ -33,7 +33,7 @@ public class GameUI : MonoBehaviour
 
     public EnemyManager enemyManager;
 
-    bool highAlertBlinkOn;
+    public bool highAlertBlinkOn;
 
     float highAlertBlinkerValue;
 
@@ -185,7 +185,7 @@ public class GameUI : MonoBehaviour
     void UpdateUITexts()
     {
         ammoText.text = "" + player.GetComponent<FPSController>().GetGun().currentAmmoCount;
-        healthText.text = "      " + player.GetComponent<PlayerStats>().currentHealth;
+        healthText.text = "      " + (player.GetComponent<FPSController>().liveAccuracy*100.0f).ToString("##");
         scoreText.text = "Score: " + player.GetComponent<FPSController>().score;
         durationText.text = "Duration: " + roundManager.roundTimer.ToString("###");
 
@@ -323,7 +323,7 @@ public class GameUI : MonoBehaviour
 
 
 
-        highAlertBlinkerValue = Mathf.PingPong(Time.time, (distance / 5 + 0.1f));
+        highAlertBlinkerValue = Mathf.PingPong(Time.time, (distance / 1 + 0.1f)); // change 1 to 5
 
         //Debug.Log("blink:"+highAlertBlinkerValue);
 

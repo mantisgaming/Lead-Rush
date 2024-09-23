@@ -162,6 +162,11 @@ public class RoundManager : MonoBehaviour
                 playerController.enemySpeedGlobal = float.Parse(dataValues[5]);
                 playerController.enemyHealthGlobal = float.Parse(dataValues[6]);
                 playerController.reticleSizeMultiplier = float.Parse(dataValues[7]);
+
+                playerController.onHitScore = int.Parse(dataValues[8]);
+                playerController.onMissScore = int.Parse(dataValues[9]);
+                playerController.onKillScore = int.Parse(dataValues[10]);
+                playerController.onDeathScore = int.Parse(dataValues[11]);
             }
         }
     }

@@ -236,6 +236,12 @@ namespace Demo.Scripts.Runtime
 
         public float enemyHealthGlobal;
 
+        public float liveAccuracy;
+
+        public int onHitScore;
+        public int onKillScore;
+        public int onMissScore;
+        public int onDeathScore;
         private void InitLayers()
         {
             InitAnimController();
@@ -486,7 +492,11 @@ namespace Demo.Scripts.Runtime
                     PlayHeadshotSFX();
                     shotsHitPerRound++;
                     headshotsHitPerRound++;
-                    score += 10;
+                    score += onHitScore;
+                }
+                else
+                {
+                    score += onMissScore;
                 }
             }
 
@@ -1155,6 +1165,11 @@ namespace Demo.Scripts.Runtime
 
             if (aimSpikeCooldown > 0)
                 aimSpikeCooldown -= Time.deltaTime;
+
+            if (shotsFiredPerRound > 0)
+                liveAccuracy = (float)shotsHitPerRound / (float)shotsFiredPerRound;
+            else
+                liveAccuracy = 0;
         }
 
         public void UpdateCameraRotation()
@@ -1275,7 +1290,7 @@ namespace Demo.Scripts.Runtime
         public void RespawnPlayer()
         {
             roundDeaths++;
-            score -= 100;
+            score += onDeathScore;
 
             movementComponent.enabled = false;
             GetComponent<CharacterController>().enabled = false;

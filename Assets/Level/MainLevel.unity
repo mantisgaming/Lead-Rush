@@ -3440,7 +3440,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &609637769
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3468,12 +3468,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 609637768}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
+  m_EffectColor: {r: 1, g: 1, b: 1, a: 1}
   m_EffectDistance: {x: 3, y: 3}
   m_UseGraphicAlpha: 1
 --- !u!114 &609637771
@@ -3496,7 +3496,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 4ca563c85ce8ba54184d6fd204c51cb4, type: 3}
+  m_Sprite: {fileID: 21300000, guid: be789f7ff6e64c4489c0e396c9a8ed26, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -4817,6 +4817,7 @@ MonoBehaviour:
   player: {fileID: 379593512}
   roundManager: {fileID: 1168704125}
   enemyManager: {fileID: 1168704124}
+  highAlertBlinkOn: 0
   beepSFX: {fileID: 8300000, guid: 60574a453fd5efb43bfb0f9597e6c0a5, type: 3}
   readyText: {fileID: 953558074}
   qoeSliderGO: {fileID: 1439862733}
