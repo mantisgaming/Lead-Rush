@@ -291,7 +291,7 @@ namespace Demo.Scripts.Runtime
             _inputDirection.x = moveX;
             _inputDirection.y = moveY;
 
-            if (!playerController.isPlayerReady  || !playerController.isQoeDisabled)
+            if (!playerController.isPlayerReady  || !playerController.isQoeDisabled || !playerController.isAcceptabilityDisabled)
             {
                 MovementState = FPSMovementState.Idle;
                 _inputDirection.x = 0;
@@ -476,7 +476,7 @@ namespace Demo.Scripts.Runtime
             a = Mathf.Lerp(a, b, FPSAnimLib.ExpDecayAlpha(_sprintAnimatorInterp, Time.deltaTime));
             _animator.SetFloat(Sprinting, a);
 
-            if (!playerController.isPlayerReady || !playerController.isQoeDisabled)
+            if (!playerController.isPlayerReady || !playerController.isQoeDisabled || !playerController.isAcceptabilityDisabled)
             {
                 _animator.SetFloat(Sprinting, 0);
             }
@@ -501,7 +501,7 @@ namespace Demo.Scripts.Runtime
         private void Update()
         {
             bool isMoving;
-            if (!playerController.isPlayerReady || !playerController.isQoeDisabled )
+            if (!playerController.isPlayerReady || !playerController.isQoeDisabled || !playerController.isAcceptabilityDisabled )
             {
                 MovementState = FPSMovementState.Idle;
                 PoseState = FPSPoseState.Standing;

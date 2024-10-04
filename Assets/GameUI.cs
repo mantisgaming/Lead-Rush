@@ -55,6 +55,8 @@ public class GameUI : MonoBehaviour
     float sliderHandleGreen;
     public Image SliderHandle;
 
+    public GameObject acceptabilityGO;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -343,18 +345,16 @@ public class GameUI : MonoBehaviour
     public void QOESubmitPressed()
     {
         roundManager.qoeValue = (float)qoeSlider.value/10.0f;
-        roundManager.LogRoundData();
-        roundManager.LogPlayerData();
-
 
         qoeSlider.value = 30.000f;
         qoeSubmitGO.SetActive(false);
+        acceptabilityGO.SetActive(true);
+        player.GetComponent<FPSController>().isAcceptabilityDisabled = false;
         player.GetComponent<FPSController>().isQoeDisabled = true;
-        player.GetComponent<FPSController>().isPlayerReady = false;
+        /*player.GetComponent<FPSController>().isPlayerReady = false;
 
         roundManager.currentRoundNumber++;
-
-
+        
         if (roundManager.currentRoundNumber > roundManager.totalRoundNumber)
         {
             TextWriter textWriter = null;
@@ -372,6 +372,78 @@ public class GameUI : MonoBehaviour
             textWriter.Close();
 
             Application.Quit(); 
+        }
+        roundManager.SetRounConfig();
+        player.GetComponent<FPSController>().ResetRound();
+        enemyManager.spawnTimer = 0;*/
+    }
+
+    public void YesPressed()
+    {
+        roundManager.acceptabilityValue = true;
+
+        roundManager.LogRoundData();
+        roundManager.LogPlayerData();
+
+        acceptabilityGO.SetActive(false);
+        player.GetComponent<FPSController>().isAcceptabilityDisabled = true;
+        player.GetComponent<FPSController>().isPlayerReady = false;
+
+        roundManager.currentRoundNumber++;
+
+        if (roundManager.currentRoundNumber > roundManager.totalRoundNumber)
+        {
+            TextWriter textWriter = null;
+            string filename = "Data\\Configs\\SessionID.csv";
+
+            while (textWriter == null)
+                textWriter = File.CreateText(filename);
+
+            roundManager.sessionID++;
+
+            if (roundManager.sessionID > 12)
+                roundManager.sessionID = 1;
+
+            textWriter.WriteLine(roundManager.sessionID);
+            textWriter.Close();
+
+            Application.Quit();
+        }
+        roundManager.SetRounConfig();
+        player.GetComponent<FPSController>().ResetRound();
+        enemyManager.spawnTimer = 0;
+    }
+
+    public void NoPressed()
+    {
+        roundManager.acceptabilityValue = false;
+
+        roundManager.LogRoundData();
+        roundManager.LogPlayerData();
+
+        acceptabilityGO.SetActive(false);
+        player.GetComponent<FPSController>().isAcceptabilityDisabled = true;
+        player.GetComponent<FPSController>().isPlayerReady = false;
+
+        roundManager.currentRoundNumber++;
+
+        if (roundManager.currentRoundNumber > roundManager.totalRoundNumber)
+        {
+            TextWriter textWriter = null;
+            string filename = "Data\\Configs\\SessionID.csv";
+
+            while (textWriter == null)
+                textWriter = File.CreateText(filename);
+
+            roundManager.sessionID++;
+
+            if (roundManager.sessionID > roundManager.totalRoundNumber/2) // MUST CHANGE
+                roundManager.sessionID = 1;
+
+            textWriter.WriteLine(roundManager.sessionID);
+            textWriter.Close();
+
+            Application.Quit();
         }
         roundManager.SetRounConfig();
         player.GetComponent<FPSController>().ResetRound();

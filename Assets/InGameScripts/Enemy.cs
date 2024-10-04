@@ -62,7 +62,7 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!playerController.isPlayerReady || !playerController.isQoeDisabled)
+        if (!playerController.isPlayerReady || !playerController.isQoeDisabled || !playerController.isAcceptabilityDisabled)
             return;
         enemyAgent.destination = player.transform.position;
 

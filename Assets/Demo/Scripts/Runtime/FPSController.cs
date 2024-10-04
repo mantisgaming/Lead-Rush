@@ -170,6 +170,7 @@ namespace Demo.Scripts.Runtime
         public int realoadCountPerRound = 0;
 
         public bool isQoeDisabled;
+        public bool isAcceptabilityDisabled;
 
         public GameManager gameManager;
 
@@ -229,6 +230,7 @@ namespace Demo.Scripts.Runtime
         public int tacticalReloadCountPerRound = 0;
 
         public float aimDurationPerRound;
+        public float isFiringDurationPerRound;
 
         public float enemySpeedGlobal;
 
@@ -769,7 +771,7 @@ namespace Demo.Scripts.Runtime
                 return;
             }
 
-            if (!isPlayerReady || !isQoeDisabled) return;
+            if (!isPlayerReady || !isQoeDisabled || !isAcceptabilityDisabled) return;
 
             if (Input.GetKeyDown(KeyCode.R))
             {
@@ -921,7 +923,7 @@ namespace Demo.Scripts.Runtime
             deltaMouseX = 0;
             deltaMouseY = 0;
             //UpdateReticle();
-            if (isPlayerReady && isQoeDisabled)
+            if (isPlayerReady && isQoeDisabled && isAcceptabilityDisabled)
             {
                 _freeLook = Input.GetKey(KeyCode.X);
 
@@ -1053,7 +1055,7 @@ namespace Demo.Scripts.Runtime
                 isPlayerReady = true;
             }
 
-            if (!isQoeDisabled)
+            if (!isQoeDisabled || !isAcceptabilityDisabled)
             {
                 Cursor.visible = true;
                 Cursor.lockState = CursorLockMode.None;
@@ -1064,7 +1066,7 @@ namespace Demo.Scripts.Runtime
                 Cursor.lockState = CursorLockMode.Locked;
             }
 
-            if (!isPlayerReady || !isQoeDisabled)
+            if (!isPlayerReady || !isQoeDisabled || !isAcceptabilityDisabled)
             {
                 //OnSprintEnded();
                 UpdateAnimController();
@@ -1089,6 +1091,8 @@ namespace Demo.Scripts.Runtime
             {
                 fireTimer -= Time.deltaTime;
 
+                isFiringDurationPerRound += Time.deltaTime;
+
                 if (fireTimer < 0)
                 {
                     Fire();
@@ -1109,7 +1113,9 @@ namespace Demo.Scripts.Runtime
             }
 
             Vector3 distanceVector = transform.position - oldPosition;
-            distanceTravelledPerRound += distanceVector.magnitude;
+
+            if(distanceVector.magnitude<1)
+                distanceTravelledPerRound += distanceVector.magnitude;
             oldPosition = transform.position;
 
             if (aimState == FPSAimState.Aiming)
@@ -1352,6 +1358,7 @@ namespace Demo.Scripts.Runtime
             degreeToTargetX = 0;
             degreeToTargetY = 0;
             aimDurationPerRound = 0;
+            isFiringDurationPerRound = 0;
 
             targetMarked = false;
             targetShot = false;

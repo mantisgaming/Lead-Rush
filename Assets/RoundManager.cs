@@ -66,6 +66,8 @@ public class RoundManager : MonoBehaviour
 
     public float qoeValue;
 
+    public bool acceptabilityValue;
+
     public int sessionID = -1;
 
     public bool isFTStudy;
@@ -104,6 +106,7 @@ public class RoundManager : MonoBehaviour
 
 
         playerController.isQoeDisabled = true;
+        playerController.isAcceptabilityDisabled = true;
         SetRounConfig();
     }
     void Shuffle<T>(List<T> list)
@@ -123,13 +126,13 @@ public class RoundManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (roundTimer > 0 && playerController.isPlayerReady && playerController.isQoeDisabled)
+        if (roundTimer > 0 && playerController.isPlayerReady && playerController.isQoeDisabled && playerController.isAcceptabilityDisabled)
         {
             roundTimer -= Time.deltaTime;
             frametimeCumulativeRound += Time.deltaTime;
             roundFrameCount++;
         }
-        else if (roundTimer <= 0 && playerController.isQoeDisabled)
+        else if (roundTimer <= 0 && playerController.isQoeDisabled && playerController.isAcceptabilityDisabled)
         {
             playerController.isQoeDisabled = false;
             playerController.ResetPlayerAndDestroyEnemy();
@@ -273,6 +276,7 @@ public class RoundManager : MonoBehaviour
 
         while (!EOF)
         {
+            line = strReader.ReadLine();
 
             if (line == null)
             {
@@ -281,9 +285,13 @@ public class RoundManager : MonoBehaviour
             }
             else
             {
-                latinMap.Add(strReader.ReadLine());
+                latinMap.Add(line);
+                //Debug.Log(strReader.ReadLine());
             }
         }
+
+       /* for (int i = 0; i < latinMap.Count; i++)
+            Debug.Log("latmap::: " + i +"::: "+latinMap[i]);*/
 
         line = null;
         strReader = new StreamReader("Data\\Configs\\SessionID.csv");
@@ -307,7 +315,6 @@ public class RoundManager : MonoBehaviour
             }
         }
 
-
         line = null;
         strReader = new StreamReader("Data\\Configs\\RoundConfig.csv");
         EOF = false;
@@ -327,14 +334,17 @@ public class RoundManager : MonoBehaviour
             else
             {
                 var configVals = line.Split(',');
-
+                Debug.Log("CONF:  "+ line);
                 if (index == sessionID)
 
                 {
                     for (int i = 0; i < configVals.Length; i++)
                     {
-                        string config = latinMap[Int32.Parse(configVals[i]) - 1];
+                        string config = latinMap[int.Parse(configVals[i]) - 1];
+                        Debug.Log("AC CONFIG:: " + config + "index ::: " + int.Parse(configVals[i]));
                         var dataValues = config.Split(',');
+
+                        
 
                         Debug.Log(dataValues[1]);
                         roundConfigs.roundFPS.Add(float.Parse(dataValues[0]));
@@ -455,7 +465,9 @@ public class RoundManager : MonoBehaviour
            degXTargetAvg.ToString() + "," +
            enemySizeOnSpawnAvg.ToString() + "," +
            playerController.aimDurationPerRound.ToString() + "," +
-           qoeValue.ToString()
+           playerController.isFiringDurationPerRound.ToString()+ ","+
+           qoeValue.ToString() + "," +
+           acceptabilityValue.ToString()
             ;
         textWriter.WriteLine(roundLogLine);
         textWriter.Close();
