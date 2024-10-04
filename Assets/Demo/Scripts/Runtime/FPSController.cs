@@ -244,6 +244,8 @@ namespace Demo.Scripts.Runtime
         public int onKillScore;
         public int onMissScore;
         public int onDeathScore;
+
+        public double spikeDurationCumulative;
         private void InitLayers()
         {
             InitAnimController();
@@ -1339,6 +1341,7 @@ namespace Demo.Scripts.Runtime
             delYCumilative = 0;
             realoadCountPerRound = 0;
             tacticalReloadCountPerRound = 0;
+            spikeDurationCumulative = 0;
             perRoundMouseMovementSpikeCount = 0;
             perRoundAimSpikeCount = 0;
             perRoundReloadSpikeCount = 0;

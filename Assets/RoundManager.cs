@@ -417,7 +417,9 @@ public class RoundManager : MonoBehaviour
         float timeToTargetAvg = (float)playerController.timeToTargetEnemyCumulative / (float)playerController.roundKills;
         float timeToHitAvg = (float)playerController.timeToHitEnemyCumulative / (float)playerController.roundKills;
         float timeToKillAvg = (float)playerController.timeToKillEnemyCumulative / (float)playerController.roundKills;
-
+        double avgspikeDurationCumulative = 0;
+        if (playerController.perRoundAimSpikeCount + playerController.perRoundReloadSpikeCount + playerController.perRoundMouseMovementSpikeCount>0)
+         avgspikeDurationCumulative = (float)playerController.spikeDurationCumulative / (float)(playerController.perRoundAimSpikeCount + playerController.perRoundReloadSpikeCount + playerController.perRoundMouseMovementSpikeCount);
         double avgFT = frametimeCumulativeRound / roundFrameCount;
         double avgFPS = 1 / avgFT;
 
@@ -453,6 +455,8 @@ public class RoundManager : MonoBehaviour
            playerController.perRoundAimSpikeCount.ToString() + "," +
            playerController.perRoundReloadSpikeCount.ToString() + "," +
            playerController.perRoundMouseMovementSpikeCount.ToString() + "," +
+           playerController.spikeDurationCumulative.ToString() + "," +
+           avgspikeDurationCumulative.ToString() + "," +
            playerController.perRoundEnemySpawnSpikeCount.ToString() + "," +
            playerController.degreeToShootXCumulative.ToString() + "," +
            playerController.degreeToTargetXCumulative.ToString() + "," +

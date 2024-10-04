@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using Unity.Profiling.LowLevel.Unsafe;
+using Demo.Scripts.Runtime;
 
 public class GameManager : MonoBehaviour
 {
@@ -29,6 +30,10 @@ public class GameManager : MonoBehaviour
     public float fixedFtDelayDuration; //ns
 
     public bool isFixedFT;
+
+    long actualWaitDuration = 0;
+
+    public FPSController playerController;
 
     // Start is called before the first frame update
     void Start()
@@ -83,20 +88,22 @@ public class GameManager : MonoBehaviour
         */
         while (isEventBasedDelay)
         {
-            if (ElapsedNanoseconds(frameStartTime) >= delayDuration * 1000000)
+            actualWaitDuration = ElapsedNanoseconds(frameStartTime);
+            if (actualWaitDuration >= delayDuration * 1000000)
             {
+                playerController.spikeDurationCumulative += actualWaitDuration/ 1000000.0;
                 isEventBasedDelay = false;
                 return;
             }
         }
 
-        while (isFixedFT)
+        /*while (isFixedFT)
         {
             if (ElapsedNanoseconds(frameStartTime) >= fixedFtDelayDuration)
             {
                 return;
             }
-        }
+        }*/
 
 
         /*if (isFrameFeeding)

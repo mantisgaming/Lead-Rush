@@ -7515,6 +7515,7 @@ MonoBehaviour:
   delayDuration: 30
   fixedFtDelayDuration: 0
   isFixedFT: 0
+  playerController: {fileID: 379593521}
 --- !u!4 &1168704123
 Transform:
   m_ObjectHideFlags: 0
