@@ -135,6 +135,7 @@ public class Enemy : MonoBehaviour
 
         String enemyLogLine =
            roundManager.sessionID.ToString() + "," +
+           roundManager.latinRow.ToString() + "," +
            roundManager.currentRoundNumber.ToString() + "," +
            roundManager.sessionStartTime.ToString() + "," +
            System.DateTime.Now.ToString() + "," +

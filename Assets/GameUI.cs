@@ -209,12 +209,12 @@ public class GameUI : MonoBehaviour
         {
             if (roundManager.currentRoundNumber <= roundManager.totalRoundNumber)
             {
-                if (roundManager.currentRoundNumber == 1 && !roundManager.isFTStudy)
+                if (roundManager.currentRoundNumber == 1)// !roundManager.isFTStudy)
                     roundText.text = "Round\n " + roundManager.currentRoundNumber + "/" + roundManager.totalRoundNumber + "\nSmoothest Practice Round";
-                else if (roundManager.currentRoundNumber == 2 && !roundManager.isFTStudy)
+                else if (roundManager.currentRoundNumber == 2)// && !roundManager.isFTStudy)
                     roundText.text = "Round\n " + roundManager.currentRoundNumber + "/" + roundManager.totalRoundNumber + "\nChoppiest Practice Round";
-                else if (roundManager.currentRoundNumber == 1 && roundManager.isFTStudy)
-                    roundText.text = "Round\n " + roundManager.currentRoundNumber + "/" + roundManager.totalRoundNumber + "\n Practice Round";
+               /* else if (roundManager.currentRoundNumber == 1 && roundManager.isFTStudy)
+                    roundText.text = "Round\n " + roundManager.currentRoundNumber + "/" + roundManager.totalRoundNumber + "\n Practice Round";*/
                 else
                     roundText.text = "Round\n " + roundManager.currentRoundNumber + "/" + roundManager.totalRoundNumber;
             }
@@ -437,8 +437,8 @@ public class GameUI : MonoBehaviour
 
             roundManager.sessionID++;
 
-            if (roundManager.sessionID > roundManager.totalRoundNumber/2) // MUST CHANGE
-                roundManager.sessionID = 1;
+            /*if (roundManager.sessionID > roundManager.totalRoundNumber/2) // MUST CHANGE
+                roundManager.sessionID = 1;*/
 
             textWriter.WriteLine(roundManager.sessionID);
             textWriter.Close();

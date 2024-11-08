@@ -328,6 +328,8 @@ namespace Demo.Scripts.Runtime
 
             playerTickLog.isADS = new List<bool>();
 
+            playerTickLog.frameTimeMS = new List<double>();
+
             playerTickLog.time.Clear();
             playerTickLog.mouseX.Clear();
             playerTickLog.mouseY.Clear();
@@ -797,7 +799,7 @@ namespace Demo.Scripts.Runtime
                 bool rightLean = Input.GetKey(KeyCode.E);
                 bool leftLean = Input.GetKey(KeyCode.Q);
 
-                _isLeaning = rightLean || leftLean;
+                //_isLeaning = rightLean || leftLean; // LEANING OFF
 
                 if (_isLeaning != wasLeaning)
                 {
@@ -836,7 +838,7 @@ namespace Demo.Scripts.Runtime
 
                 if (Input.GetKeyDown(KeyCode.V))
                 {
-                    ChangeScope();
+                    //ChangeScope(); // SIDESCOPING OFF
                 }
 
                 if (Input.GetKeyDown(KeyCode.B) && IsAiming())
@@ -1087,7 +1089,7 @@ namespace Demo.Scripts.Runtime
             UpdateActionInput();
             UpdateLookInput();
             UpdateRecoil();
-            UpdatePlayerLog();
+            
 
             if (_isFiring)
             {
@@ -1126,7 +1128,7 @@ namespace Demo.Scripts.Runtime
             }
         }
 
-        void UpdatePlayerLog()
+        public void UpdatePlayerLog(double deltaTime)
         {
             GameObject enemy = GameObject.FindGameObjectWithTag("Enemy");
 
@@ -1149,6 +1151,10 @@ namespace Demo.Scripts.Runtime
             else
                 playerTickLog.enemyPos.Add(new Vector3(0, 0, 0));
             playerTickLog.isADS.Add(IsAiming());
+
+            playerTickLog.frameTimeMS.Add(deltaTime);
+
+            //Debug.Log("TICK: " + Time.deltaTime * 1000.0);
 
             //Debug.Log("Aim: " + degreeToTargetX + "  " +targetMarked);
             //Debug.Log("Shoot: " + degreeToShootX + "  " + targetShot);
@@ -1327,7 +1333,6 @@ namespace Demo.Scripts.Runtime
 
         public void ResetRound()
         {
-
             GetGun().currentAmmoCount = GetGun().magSize;
 
             score = 0;
@@ -1380,6 +1385,8 @@ namespace Demo.Scripts.Runtime
             playerTickLog.playerRot.Clear();
             playerTickLog.enemyPos.Clear();
             playerTickLog.isADS.Clear();
+
+            playerTickLog.frameTimeMS.Clear(); 
 
         }
 

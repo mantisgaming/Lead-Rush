@@ -35,6 +35,7 @@ public struct PlayerTickLog
     public List<bool> isADS;
 
     public List<float> scorePerSec;
+    public List<double> frameTimeMS;
 }
 
 public class RoundManager : MonoBehaviour
@@ -72,9 +73,14 @@ public class RoundManager : MonoBehaviour
 
     public bool isFTStudy;
 
+    public int latinSquareRowNumber = 0;
+
+    public int latinRow;
+
     // Start is called before the first frame update
     void Start()
     {
+        latinSquareRowNumber = 0;
         currentRoundNumber = 1;
         fileNameSuffix = GenRandomID(6).ToString();
         sessionStartTime = System.DateTime.Now.ToString("yy:mm:dd:hh:mm:ss");
@@ -82,6 +88,8 @@ public class RoundManager : MonoBehaviour
         gameManager = GetComponent<GameManager>();
 
         ReadGlobalConfig();
+
+        ReadLatinSquareSize();
 
         ReadFromLatinSquare();
 
@@ -139,7 +147,33 @@ public class RoundManager : MonoBehaviour
         }
     }
 
+    void ReadLatinSquareSize()
+    {
+        if (isFTStudy)
+        {
+            bool EOF = false;
+            string line = null;
+            StreamReader strReader = new StreamReader("Data\\Configs\\RoundConfig.csv");
+            EOF = false;
 
+            while (!EOF)
+            {
+                line = strReader.ReadLine();
+                if (line == null)
+                {
+                    EOF = true;
+                    break;
+                }
+                else
+                {
+                    latinSquareRowNumber++;
+                    Debug.Log("LATIN SQUARE ROW COUNT = " + latinSquareRowNumber);
+                }
+            }
+
+            Debug.Log("LATIN SQUARE final ROW COUNT = " +latinSquareRowNumber);
+        }
+    }
     void ReadGlobalConfig()
     {
         string line = null;
@@ -242,12 +276,12 @@ public class RoundManager : MonoBehaviour
         else
         {
             //Practice round single for FT study
-            roundConfigs.roundFPS.Add(500);
+            /*roundConfigs.roundFPS.Add(500);
             roundConfigs.spikeMagnitude.Add(0);
             roundConfigs.onAimSpikeEnabled.Add(false);
             roundConfigs.onReloadSpikeEnabled.Add(false);
             roundConfigs.onMouseSpikeEnabled.Add(false);
-            roundConfigs.onEnemySpawnSpikeEnabled.Add(false);
+            roundConfigs.onEnemySpawnSpikeEnabled.Add(false);*/
 
             ReadFTStudyCSV();
         }
@@ -290,8 +324,8 @@ public class RoundManager : MonoBehaviour
             }
         }
 
-       /* for (int i = 0; i < latinMap.Count; i++)
-            Debug.Log("latmap::: " + i +"::: "+latinMap[i]);*/
+        /* for (int i = 0; i < latinMap.Count; i++)
+             Debug.Log("latmap::: " + i +"::: "+latinMap[i]);*/
 
         line = null;
         strReader = new StreamReader("Data\\Configs\\SessionID.csv");
@@ -319,6 +353,9 @@ public class RoundManager : MonoBehaviour
         strReader = new StreamReader("Data\\Configs\\RoundConfig.csv");
         EOF = false;
         roundConfigs.roundFPS.Clear();
+        latinRow = ((sessionID - 1) % latinSquareRowNumber) +1;
+
+        Debug.Log("LATIN ROW NUMBER: " + latinRow);
 
         int index = 1;
 
@@ -334,8 +371,8 @@ public class RoundManager : MonoBehaviour
             else
             {
                 var configVals = line.Split(',');
-                Debug.Log("CONF:  "+ line);
-                if (index == sessionID)
+                Debug.Log("CONF:  " + line);
+                if (index == latinRow)
 
                 {
                     for (int i = 0; i < configVals.Length; i++)
@@ -344,7 +381,7 @@ public class RoundManager : MonoBehaviour
                         Debug.Log("AC CONFIG:: " + config + "index ::: " + int.Parse(configVals[i]));
                         var dataValues = config.Split(',');
 
-                        
+
 
                         Debug.Log(dataValues[1]);
                         roundConfigs.roundFPS.Add(float.Parse(dataValues[0]));
@@ -418,13 +455,14 @@ public class RoundManager : MonoBehaviour
         float timeToHitAvg = (float)playerController.timeToHitEnemyCumulative / (float)playerController.roundKills;
         float timeToKillAvg = (float)playerController.timeToKillEnemyCumulative / (float)playerController.roundKills;
         double avgspikeDurationCumulative = 0;
-        if (playerController.perRoundAimSpikeCount + playerController.perRoundReloadSpikeCount + playerController.perRoundMouseMovementSpikeCount>0)
-         avgspikeDurationCumulative = (float)playerController.spikeDurationCumulative / (float)(playerController.perRoundAimSpikeCount + playerController.perRoundReloadSpikeCount + playerController.perRoundMouseMovementSpikeCount);
+        if (playerController.perRoundAimSpikeCount + playerController.perRoundReloadSpikeCount + playerController.perRoundMouseMovementSpikeCount > 0)
+            avgspikeDurationCumulative = (float)playerController.spikeDurationCumulative / (float)(playerController.perRoundAimSpikeCount + playerController.perRoundReloadSpikeCount + playerController.perRoundMouseMovementSpikeCount);
         double avgFT = frametimeCumulativeRound / roundFrameCount;
         double avgFPS = 1 / avgFT;
 
         String roundLogLine =
            sessionID.ToString() + "," +
+           latinRow.ToString() + "," +
            currentRoundNumber.ToString() + "," +
            sessionStartTime.ToString() + "," +
            System.DateTime.Now.ToString() + "," +
@@ -469,7 +507,7 @@ public class RoundManager : MonoBehaviour
            degXTargetAvg.ToString() + "," +
            enemySizeOnSpawnAvg.ToString() + "," +
            playerController.aimDurationPerRound.ToString() + "," +
-           playerController.isFiringDurationPerRound.ToString()+ ","+
+           playerController.isFiringDurationPerRound.ToString() + "," +
            qoeValue.ToString() + "," +
            acceptabilityValue.ToString()
             ;
@@ -490,6 +528,7 @@ public class RoundManager : MonoBehaviour
         {
             String tickLogLine =
                sessionID.ToString() + "," +
+               latinRow.ToString() + "," +
                currentRoundNumber.ToString() + "," +
                roundConfigs.roundFPS[indexArray[currentRoundNumber - 1]].ToString() + "," +
                roundConfigs.spikeMagnitude[indexArray[currentRoundNumber - 1]].ToString() + "," +
@@ -508,7 +547,8 @@ public class RoundManager : MonoBehaviour
                playerController.playerTickLog.scorePerSec[i].ToString() + "," +
                playerController.playerTickLog.playerRot[i].ToString() + "," +
                playerController.playerTickLog.enemyPos[i].ToString() + "," +
-               playerController.playerTickLog.isADS[i].ToString();
+               playerController.playerTickLog.isADS[i].ToString() + "," +
+               playerController.playerTickLog.frameTimeMS[i].ToString();
 
             textWriter.WriteLine(tickLogLine);
         }

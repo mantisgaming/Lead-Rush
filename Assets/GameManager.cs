@@ -93,9 +93,16 @@ public class GameManager : MonoBehaviour
             {
                 playerController.spikeDurationCumulative += actualWaitDuration/ 1000000.0;
                 isEventBasedDelay = false;
+                playerController.UpdatePlayerLog(actualWaitDuration / 1000000.0);
                 return;
             }
         }
+
+        if (playerController.isPlayerReady && playerController.isQoeDisabled && playerController.isAcceptabilityDisabled)
+        {
+            playerController.UpdatePlayerLog(Time.deltaTime * 1000.0);
+        }
+
 
         /*while (isFixedFT)
         {
