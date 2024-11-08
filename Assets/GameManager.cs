@@ -35,6 +35,8 @@ public class GameManager : MonoBehaviour
 
     public FPSController playerController;
 
+    public bool isFrameAfterSpike;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -42,6 +44,7 @@ public class GameManager : MonoBehaviour
         isFrameFeeding = false;
         isFixedFT = true;
         delayDurationIndex = 0;
+        isFrameAfterSpike = false;
     }
 
     // Update is called once per frame
@@ -69,6 +72,8 @@ public class GameManager : MonoBehaviour
             frameTimeCumulative += Time.deltaTime * 1000;
         }*/
     }
+
+    
     private void LateUpdate()
     {
         // Simple
@@ -94,14 +99,17 @@ public class GameManager : MonoBehaviour
                 playerController.spikeDurationCumulative += actualWaitDuration/ 1000000.0;
                 isEventBasedDelay = false;
                 playerController.UpdatePlayerLog(actualWaitDuration / 1000000.0);
+                isFrameAfterSpike = true;
                 return;
             }
         }
 
-        if (playerController.isPlayerReady && playerController.isQoeDisabled && playerController.isAcceptabilityDisabled)
+        if (playerController.isPlayerReady && playerController.isQoeDisabled && playerController.isAcceptabilityDisabled && !isFrameAfterSpike)
         {
             playerController.UpdatePlayerLog(Time.deltaTime * 1000.0);
         }
+
+        isFrameAfterSpike = false;
 
 
         /*while (isFixedFT)
