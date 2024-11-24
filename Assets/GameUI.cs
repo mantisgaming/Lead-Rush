@@ -401,9 +401,6 @@ public class GameUI : MonoBehaviour
 
             roundManager.sessionID++;
 
-            if (roundManager.sessionID > 12)
-                roundManager.sessionID = 1;
-
             textWriter.WriteLine(roundManager.sessionID);
             textWriter.Close();
 
