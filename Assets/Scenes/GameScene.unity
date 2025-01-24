@@ -206,8 +206,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 84973662}
+  - component: {fileID: 84973663}
   m_Layer: 3
-  m_Name: SP4
+  m_Name: Enemy Spawn 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -228,6 +229,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1998659875}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &84973663
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 84973661}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 050224606ddc16d49ae6588d2822d494, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_spawnGroup: {fileID: 11400000, guid: 5f05361db7a882442b05683ae17cdda1, type: 2}
 --- !u!1 &98449939
 GameObject:
   m_ObjectHideFlags: 0
@@ -647,7 +661,7 @@ Transform:
   m_GameObject: {fileID: 173489183}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -20, y: 1, z: 0}
+  m_LocalPosition: {x: -20, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 41}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1631,8 +1645,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 329230537}
+  - component: {fileID: 329230538}
   m_Layer: 3
-  m_Name: SP2
+  m_Name: Enemy Spawn 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1653,6 +1668,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1998659875}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &329230538
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 329230536}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 050224606ddc16d49ae6588d2822d494, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_spawnGroup: {fileID: 11400000, guid: 5f05361db7a882442b05683ae17cdda1, type: 2}
 --- !u!1 &355715594
 GameObject:
   m_ObjectHideFlags: 0
@@ -1662,8 +1690,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 355715595}
+  - component: {fileID: 355715596}
   m_Layer: 3
-  m_Name: SP2 (1)
+  m_Name: Enemy Spawn 7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1684,6 +1713,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1998659875}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &355715596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 355715594}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 050224606ddc16d49ae6588d2822d494, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_spawnGroup: {fileID: 11400000, guid: 5f05361db7a882442b05683ae17cdda1, type: 2}
 --- !u!1 &379593512 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2962799436222830615, guid: 09dfc55288e2c514d98ea3b20e78195b, type: 3}
@@ -2245,8 +2287,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 447165680}
+  - component: {fileID: 447165681}
   m_Layer: 3
-  m_Name: SP5 (1)
+  m_Name: Enemy Spawn 10
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2267,6 +2310,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1998659875}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &447165681
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 447165679}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 050224606ddc16d49ae6588d2822d494, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_spawnGroup: {fileID: 11400000, guid: 5f05361db7a882442b05683ae17cdda1, type: 2}
 --- !u!1 &483202113
 GameObject:
   m_ObjectHideFlags: 0
@@ -2513,8 +2569,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 537506408}
+  - component: {fileID: 537506409}
   m_Layer: 3
-  m_Name: SP4 (1)
+  m_Name: Enemy Spawn 9
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2535,6 +2592,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1998659875}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &537506409
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 537506407}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 050224606ddc16d49ae6588d2822d494, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_spawnGroup: {fileID: 11400000, guid: 5f05361db7a882442b05683ae17cdda1, type: 2}
 --- !u!1 &558869681
 GameObject:
   m_ObjectHideFlags: 0
@@ -3197,7 +3267,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &673107567
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4437,8 +4507,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 915440656}
+  - component: {fileID: 915440657}
   m_Layer: 3
-  m_Name: SP1 (1)
+  m_Name: Enemy Spawn 6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4459,6 +4530,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1998659875}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &915440657
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 915440655}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 050224606ddc16d49ae6588d2822d494, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_spawnGroup: {fileID: 11400000, guid: 5f05361db7a882442b05683ae17cdda1, type: 2}
 --- !u!1 &953558074
 GameObject:
   m_ObjectHideFlags: 0
@@ -4976,8 +5060,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1343399178}
+  - component: {fileID: 1343399179}
   m_Layer: 3
-  m_Name: SP5
+  m_Name: Enemy Spawn 5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4998,6 +5083,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1998659875}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1343399179
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1343399177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 050224606ddc16d49ae6588d2822d494, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_spawnGroup: {fileID: 11400000, guid: 5f05361db7a882442b05683ae17cdda1, type: 2}
 --- !u!1 &1379553058
 GameObject:
   m_ObjectHideFlags: 0
@@ -5099,7 +5197,7 @@ Transform:
   m_GameObject: {fileID: 1379553058}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 20, y: 1, z: 0}
+  m_LocalPosition: {x: 20, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 41}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5232,8 +5330,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1457548640}
+  - component: {fileID: 1457548641}
   m_Layer: 3
-  m_Name: SP1
+  m_Name: Enemy Spawn 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5254,6 +5353,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1998659875}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1457548641
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1457548639}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 050224606ddc16d49ae6588d2822d494, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_spawnGroup: {fileID: 11400000, guid: 5f05361db7a882442b05683ae17cdda1, type: 2}
 --- !u!1 &1494118743
 GameObject:
   m_ObjectHideFlags: 0
@@ -5493,7 +5605,7 @@ Transform:
   m_GameObject: {fileID: 1548638626}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -20}
+  m_LocalPosition: {x: 0, y: 0.5, z: -20}
   m_LocalScale: {x: 39, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5581,8 +5693,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1550706707}
+  - component: {fileID: 1550706708}
   m_Layer: 3
-  m_Name: SP3 (1)
+  m_Name: Enemy Spawn 8
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5603,6 +5716,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1998659875}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1550706708
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1550706706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 050224606ddc16d49ae6588d2822d494, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_spawnGroup: {fileID: 11400000, guid: 5f05361db7a882442b05683ae17cdda1, type: 2}
 --- !u!1 &1566629824
 GameObject:
   m_ObjectHideFlags: 0
@@ -5665,7 +5791,7 @@ Transform:
   m_GameObject: {fileID: 1602259995}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 20}
+  m_LocalPosition: {x: 0, y: 0.5, z: 20}
   m_LocalScale: {x: 39, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5846,7 +5972,7 @@ Transform:
   m_GameObject: {fileID: 1607011131}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0.5, z: 0}
   m_LocalScale: {x: 80, y: 1, z: 80}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6271,8 +6397,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1833548915}
+  - component: {fileID: 1833548916}
   m_Layer: 3
-  m_Name: SP3
+  m_Name: Enemy Spawn 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6293,6 +6420,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1998659875}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1833548916
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1833548914}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 050224606ddc16d49ae6588d2822d494, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_spawnGroup: {fileID: 11400000, guid: 5f05361db7a882442b05683ae17cdda1, type: 2}
 --- !u!1 &1835302112
 GameObject:
   m_ObjectHideFlags: 0
@@ -6880,14 +7020,14 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1457548640}
-  - {fileID: 915440656}
   - {fileID: 329230537}
-  - {fileID: 355715595}
   - {fileID: 1833548915}
-  - {fileID: 1550706707}
   - {fileID: 84973662}
-  - {fileID: 537506408}
   - {fileID: 1343399178}
+  - {fileID: 915440656}
+  - {fileID: 355715595}
+  - {fileID: 1550706707}
+  - {fileID: 537506408}
   - {fileID: 447165680}
   m_Father: {fileID: 1566629825}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6911,8 +7051,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2064364865}
+  - component: {fileID: 2064364866}
   m_Layer: 3
-  m_Name: PSP
+  m_Name: Player Spawn 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6927,12 +7068,25 @@ Transform:
   m_GameObject: {fileID: 2064364864}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.84, y: 3, z: -5.14}
+  m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 704581486}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2064364866
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2064364864}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 050224606ddc16d49ae6588d2822d494, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_spawnGroup: {fileID: 11400000, guid: a3569385870006a48be0e90a0e977f07, type: 2}
 --- !u!1 &2072892913
 GameObject:
   m_ObjectHideFlags: 0
