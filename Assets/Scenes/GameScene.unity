@@ -4940,13 +4940,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4810b554045ce841bd98670a6775693, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roundConfigs:
-    roundFPS: []
-    spikeMagnitude: []
-    onAimSpikeEnabled: 
-    onReloadSpikeEnabled: 
-    onMouseSpikeEnabled: 
-    onEnemySpawnSpikeEnabled: 
+  roundConfigs: []
   roundDuration: 60
   roundTimer: 0
   totalRoundNumber: 0

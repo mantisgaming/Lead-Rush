@@ -132,32 +132,32 @@ public class Enemy : MonoBehaviour
             textWriter = File.AppendText(filenameEnemyLog);
 
 
-        String enemyLogLine =
-           roundManager.sessionID.ToString() + "," +
-           roundManager.latinRow.ToString() + "," +
-           roundManager.currentRoundNumber.ToString() + "," +
-           roundManager.sessionStartTime.ToString() + "," +
-           System.DateTime.Now.ToString() + "," +
-           roundManager.roundConfigs.roundFPS[roundManager.indexArray[roundManager.currentRoundNumber - 1]].ToString() + "," +
-               roundManager.roundConfigs.spikeMagnitude[roundManager.indexArray[roundManager.currentRoundNumber - 1]].ToString() + "," +
-               roundManager.roundConfigs.onAimSpikeEnabled[roundManager.indexArray[roundManager.currentRoundNumber - 1]].ToString() + "," +
-               roundManager.roundConfigs.onEnemySpawnSpikeEnabled[roundManager.indexArray[roundManager.currentRoundNumber - 1]].ToString() + "," +
-               roundManager.roundConfigs.onMouseSpikeEnabled[roundManager.indexArray[roundManager.currentRoundNumber - 1]].ToString() + "," +
-               roundManager.roundConfigs.onReloadSpikeEnabled[roundManager.indexArray[roundManager.currentRoundNumber - 1]].ToString() + "," +
-               roundManager.indexArray[roundManager.currentRoundNumber - 1].ToString() + "," +
-           currentHealth.ToString() + "," +
-           minAngleToPlayer.ToString() + "," +
-           angularSizeOnSpawn.ToString() + "," +
-           fPSController.degreeToTargetX.ToString() + "," +
-           fPSController.degreeToTargetY.ToString() + "," +
-           fPSController.degreeToShootX.ToString() + "," +
-           fPSController.degreeToShootY.ToString() + "," +
-           fPSController.timeToTargetEnemy.ToString() + "," +
-           fPSController.timeToHitEnemy.ToString() + "," +
-           fPSController.timeToKillEnemy.ToString() + "," +
-           fPSController.targetMarked.ToString() + "," +
-           fPSController.targetShot.ToString()
-            ;
+        string enemyLogLine =
+            $"{roundManager.sessionID}," +
+            $"{roundManager.latinRow}," +
+            $"{roundManager.currentRoundNumber}," +
+            $"{roundManager.sessionStartTime}," +
+            $"{DateTime.Now}," +
+            $"{roundManager.currentRoundConfig.roundFPS}," +
+            $"{roundManager.currentRoundConfig.spikeMagnitude}," +
+            $"{roundManager.currentRoundConfig.onAimSpikeEnabled}," +
+            $"{roundManager.currentRoundConfig.onEnemySpawnSpikeEnabled}," +
+            $"{roundManager.currentRoundConfig.onMouseSpikeEnabled}," +
+            $"{roundManager.currentRoundConfig.onReloadSpikeEnabled}," +
+            $"{roundManager.indexArray[roundManager.currentRoundNumber - 1]}," +
+            $"{currentHealth}," +
+            $"{minAngleToPlayer}," +
+            $"{angularSizeOnSpawn}," +
+            $"{fPSController.degreeToTargetX}," +
+            $"{fPSController.degreeToTargetY}," +
+            $"{fPSController.degreeToShootX}," +
+            $"{fPSController.degreeToShootY}," +
+            $"{fPSController.timeToTargetEnemy}," +
+            $"{fPSController.timeToHitEnemy}," +
+            $"{fPSController.timeToKillEnemy}," +
+            $"{fPSController.targetMarked}," +
+            $"{fPSController.targetShot}";
+
         textWriter.WriteLine(enemyLogLine);
         textWriter.Close();
 
