@@ -290,11 +290,6 @@ public class GameUI : MonoBehaviour
         float blue = 0;
         float alpha = 1 / (distance / 10);
 
-        highAlertTop.rectTransform.localScale = new Vector3(1 / ((distance / 5) + 1), 1, 0.9f);
-        highAlertBottom.rectTransform.localScale = new Vector3(1 / (((distance / 5) + 0.9f)), 1, 1);
-        highAlertLeft.rectTransform.localScale = new Vector3(1 / (((distance / 5) + 0.9f)), 1, 1);
-        highAlertRight.rectTransform.localScale = new Vector3(1 / (((distance / 5) + 0.9f)), 1, 1);
-
         /*highAlertTop.color = new Color(red, green, blue, alpha);
         highAlertBottom.color = new Color(red, green, blue, alpha);
         highAlertLeft.color = new Color(red, green, blue, alpha);
@@ -304,6 +299,7 @@ public class GameUI : MonoBehaviour
         { 
             highAlertTop.color = new Color(red, 33, blue, 0);
             highAlertBottom.color = new Color(red, 33, blue, 0);
+            highAlertLeft.color = new Color(red, 33, blue, 0);
             highAlertLeft.color = new Color(red, 33, blue, 0);
             highAlertRight.color = new Color(red, 33, blue, 0);
             beeperFuse = true;
