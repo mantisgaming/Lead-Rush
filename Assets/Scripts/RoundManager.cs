@@ -5,27 +5,6 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-[System.Serializable]
-public struct PlayerTickLog
-{
-    public List<string> time;
-    public List<float> roundTimer;
-    public List<float> mouseX;
-    public List<float> mouseY;
-
-    public List<float> playerX;
-    public List<float> playerY;
-    public List<float> playerZ;
-
-    public List<Quaternion> playerRot;
-
-    public List<Vector3> enemyPos;
-    public List<bool> isADS;
-
-    public List<float> scorePerSec;
-    public List<double> frameTimeMS;
-}
-
 public class RoundManager : MonoBehaviour
 {
     public List<RoundConfig> roundConfigs;
@@ -513,8 +492,10 @@ public class RoundManager : MonoBehaviour
         while (textWriter == null)
             textWriter = System.IO.File.AppendText(filenamePerRound);
 
-        for (int i = 0; i < playerController.playerTickLog.mouseX.Count; i++)
+        for (int i = 0; i < playerController.playerTickLog.Count; i++)
         {
+            var tickLogEntry = playerController.playerTickLog[i];
+
             string tickLogLine =
                $"{sessionID}," +
                $"{latinRow}," +
@@ -526,18 +507,18 @@ public class RoundManager : MonoBehaviour
                $"{currentRoundConfig.onMouseSpikeEnabled}," +
                $"{currentRoundConfig.onReloadSpikeEnabled}," +
                $"{indexArray[currentRoundNumber - 1]}," +
-               $"{playerController.playerTickLog.roundTimer[i]}," +
-               $"{playerController.playerTickLog.time[i]}," +
-               $"{playerController.playerTickLog.mouseX[i]}," +
-               $"{playerController.playerTickLog.mouseY[i]}," +
-               $"{playerController.playerTickLog.playerX[i]}," +
-               $"{playerController.playerTickLog.playerY[i]}," +
-               $"{playerController.playerTickLog.playerZ[i]}," +
-               $"{playerController.playerTickLog.scorePerSec[i]}," +
-               $"{playerController.playerTickLog.playerRot[i]}," +
-               $"{playerController.playerTickLog.enemyPos[i]}," +
-               $"{playerController.playerTickLog.isADS[i]}," +
-               $"{playerController.playerTickLog.frameTimeMS[i]}";
+               $"{tickLogEntry.roundTimer}," +
+               $"{tickLogEntry.time}," +
+               $"{tickLogEntry.mouseX}," +
+               $"{tickLogEntry.mouseY}," +
+               $"{tickLogEntry.playerX}," +
+               $"{tickLogEntry.playerY}," +
+               $"{tickLogEntry.playerZ}," +
+               $"{tickLogEntry.scorePerSec}," +
+               $"{tickLogEntry.playerRot}," +
+               $"{tickLogEntry.enemyPos}," +
+               $"{tickLogEntry.isADS}," +
+               $"{tickLogEntry.frameTimeMS}";
 
             textWriter.WriteLine(tickLogLine);
         }

@@ -196,7 +196,7 @@ namespace Demo.Scripts.Runtime
         public int perRoundMouseMovementSpikeCount;
         public int perRoundEnemySpawnSpikeCount;
 
-        public PlayerTickLog playerTickLog;
+        public List<PlayerTickLogEntry> playerTickLog = new();
 
         public Image clickToPhotonIMG;
 
@@ -309,30 +309,7 @@ namespace Demo.Scripts.Runtime
             playerAudioSource = GetComponent<AudioSource>();
             enemyAimedFuse = false;
 
-            playerTickLog = new PlayerTickLog();
-
-            playerTickLog.time = new List<string>();
-            playerTickLog.mouseX = new List<float>();
-            playerTickLog.mouseY = new List<float>();
-
-            playerTickLog.playerX = new List<float>();
-            playerTickLog.playerY = new List<float>();
-            playerTickLog.playerZ = new List<float>();
-
-            playerTickLog.roundTimer = new List<float>();
-
-            playerTickLog.scorePerSec = new List<float>();
-
-            playerTickLog.playerRot = new List<Quaternion>();
-            playerTickLog.enemyPos = new List<Vector3>();
-
-            playerTickLog.isADS = new List<bool>();
-
-            playerTickLog.frameTimeMS = new List<double>();
-
-            playerTickLog.time.Clear();
-            playerTickLog.mouseX.Clear();
-            playerTickLog.mouseY.Clear();
+            playerTickLog.Clear();
 
             targetMarked = false;
             targetShot = false;
@@ -1133,27 +1110,21 @@ namespace Demo.Scripts.Runtime
             GameObject enemy = GameObject.FindGameObjectWithTag("Enemy");
 
 
-            playerTickLog.time.Add(System.DateTime.Now.ToString());
-            playerTickLog.mouseX.Add(deltaMouseX);
-            playerTickLog.mouseY.Add(deltaMouseY);
-
-            playerTickLog.playerX.Add(transform.position.x);
-            playerTickLog.playerY.Add(transform.position.y);
-            playerTickLog.playerZ.Add(transform.position.z);
-
-            playerTickLog.scorePerSec.Add(score / (roundManager.roundDuration - roundManager.roundTimer));
-
-            playerTickLog.roundTimer.Add((roundManager.roundDuration - roundManager.roundTimer));
-
-            playerTickLog.playerRot.Add(this.transform.rotation);
-            if (enemy != null)
-                playerTickLog.enemyPos.Add(enemy.transform.position);
-            else
-                playerTickLog.enemyPos.Add(new Vector3(0, 0, 0));
-            playerTickLog.isADS.Add(IsAiming());
-
-            playerTickLog.frameTimeMS.Add(deltaTime);
-
+            playerTickLog.Add(new PlayerTickLogEntry {
+                time = DateTime.Now.ToString(),
+                mouseX = deltaMouseX,
+                mouseY = deltaMouseY,
+                playerX = transform.position.x,
+                playerY = transform.position.y,
+                playerZ = transform.position.z,
+                playerRot = transform.rotation,
+                scorePerSec = score / (roundManager.roundDuration - roundManager.roundTimer),
+                roundTimer = roundManager.roundDuration - roundManager.roundTimer,
+                enemyPos = enemy ? enemy.transform.position : Vector3.zero,
+                isADS = IsAiming(),
+                frameTimeMS = deltaTime
+            });
+            
             //Debug.Log("TICK: " + Time.deltaTime * 1000.0);
 
             //Debug.Log("Aim: " + degreeToTargetX + "  " +targetMarked);
@@ -1371,22 +1342,7 @@ namespace Demo.Scripts.Runtime
             targetMarked = false;
             targetShot = false;
 
-            playerTickLog.time.Clear();
-            playerTickLog.mouseX.Clear();
-            playerTickLog.mouseY.Clear();
-
-            playerTickLog.playerX.Clear();
-            playerTickLog.playerY.Clear();
-            playerTickLog.playerZ.Clear();
-
-            playerTickLog.scorePerSec.Clear();
-            playerTickLog.roundTimer.Clear();
-
-            playerTickLog.playerRot.Clear();
-            playerTickLog.enemyPos.Clear();
-            playerTickLog.isADS.Clear();
-
-            playerTickLog.frameTimeMS.Clear(); 
+            playerTickLog.Clear();
 
         }
 
