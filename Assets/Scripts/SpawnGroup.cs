@@ -7,7 +7,7 @@ using Random = UnityEngine.Random;
 [CreateAssetMenu(fileName = "New Spawn Group", menuName = "Game/Spawn Group")]
 public class SpawnGroup : ScriptableObject {
 
-    private List<SpawnPoint> spawnPoints;
+    private List<SpawnPoint> spawnPoints = new();
 
     public SpawnPoint[] SpawnPoints { get { return spawnPoints.ToArray(); } }
 

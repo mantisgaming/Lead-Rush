@@ -4043,7 +4043,7 @@ MonoBehaviour:
   sliderText: {fileID: 2012106643}
   qoeSubmitGO: {fileID: 290208505}
   gameManager: {fileID: 1168704122}
-  lagText: {fileID: 1494118744}
+  lagText: {fileID: 0}
   SliderHandle: {fileID: 1724246158}
   acceptabilityGO: {fileID: 623259212}
 --- !u!1 &789885130
@@ -4873,7 +4873,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 866f6e64614d134448311167c8a60523, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  frameCountText: {fileID: 1494118744}
+  frameCountText: {fileID: 0}
   isEventBasedDelay: 0
   delayDuration: 30
   fixedFtDelayDuration: 0
@@ -5377,13 +5377,14 @@ GameObject:
   - component: {fileID: 1494118746}
   - component: {fileID: 1494118745}
   - component: {fileID: 1494118744}
+  - component: {fileID: 1494118747}
   m_Layer: 5
   m_Name: Lag
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1494118744
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5404,7 +5405,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Frame
+  m_text: 60 fps
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8a89fa14b10d46a99122fd4f73fca9a2, type: 2}
   m_sharedMaterial: {fileID: 2140474, guid: 8a89fa14b10d46a99122fd4f73fca9a2, type: 2}
@@ -5502,6 +5503,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 26.76001}
   m_SizeDelta: {x: 200, y: 53.513916}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1494118747
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1494118743}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2339b245e1168fb449e7bc10d7c44555, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_movingAverageDuration: 1
+  m_format: '{0} fps'
 --- !u!1 &1538830055
 GameObject:
   m_ObjectHideFlags: 0

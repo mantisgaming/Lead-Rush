@@ -193,7 +193,7 @@ public class GameUI : MonoBehaviour
         killsText.text = "Kills: " + player.GetComponent<FPSController>().roundKills;
         deathsText.text = "Deaths: " + player.GetComponent<FPSController>().roundDeaths;
 
-        lagText.text = gameManager.delayDuration.ToString();
+        //lagText.text = gameManager.delayDuration.ToString();
 
         
 
