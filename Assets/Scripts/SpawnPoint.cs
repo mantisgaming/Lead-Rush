@@ -20,7 +20,6 @@ public class SpawnPoint : MonoBehaviour {
     }
 
     private void OnDrawGizmos() {
-
         Gizmos.DrawIcon(transform.position, "SpawnPoint.png", true, spawnGroup != null ? spawnGroup.IconColor : Color.white);
     }
 }

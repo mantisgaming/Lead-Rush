@@ -16,13 +16,11 @@ public class Enemy : MonoBehaviour
 
     public float maxHealth;
 
-    float currentHealth;
+    private float currentHealth;
 
     public ParticleSystem deathPE;
 
     public ParticleSystem explodePE;
-
-    public SphereCollider largeCollider;
 
     public Transform headTransform;
 
@@ -64,14 +62,6 @@ public class Enemy : MonoBehaviour
         if (!playerController.isPlayerReady || !playerController.isQoeDisabled || !playerController.isAcceptabilityDisabled)
             return;
         enemyAgent.destination = player.transform.position;
-
-        //float angularSize =  playerController.CalculateAngularSize(enemyHead, playerController.mainCamera.position);
-
-        //Debug.Log("Angular size: " + angularSize);
-
-        largeCollider.transform.localScale = new Vector3(2.5F + Mathf.PingPong(Time.time, 1.0f),1,1);
-
-        //Debug.Log("Min: " + minAngleToPlayer);
     }
 
     public void TakeDamage(float damage)

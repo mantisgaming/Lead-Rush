@@ -74,7 +74,7 @@ public class GameUI : MonoBehaviour
 
     void UpdateHighAlert() {
 
-        GameObject enemy = enemyManager.GetClosestEnemy();
+        GameObject enemy = GameObject.FindGameObjectWithTag("Enemy");
 
         if(player.GetComponent<FPSController>().deathTimeOut>0)
         {
@@ -403,7 +403,7 @@ public class GameUI : MonoBehaviour
         }
         roundManager.SetRounConfig();
         player.GetComponent<FPSController>().ResetRound();
-        enemyManager.spawnTimer = 0;
+        //enemyManager.spawnTimer = 0;
     }
 
     public void NoPressed()
@@ -439,6 +439,6 @@ public class GameUI : MonoBehaviour
         }
         roundManager.SetRounConfig();
         player.GetComponent<FPSController>().ResetRound();
-        enemyManager.spawnTimer = 0;
+        //enemyManager.spawnTimer = 0;
     }
 }

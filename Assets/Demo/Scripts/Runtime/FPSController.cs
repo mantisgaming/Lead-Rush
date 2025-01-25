@@ -1109,7 +1109,6 @@ namespace Demo.Scripts.Runtime
         {
             GameObject enemy = GameObject.FindGameObjectWithTag("Enemy");
 
-
             playerTickLog.Add(new PlayerTickLogEntry {
                 time = DateTime.Now.ToString(),
                 mouseX = deltaMouseX,
@@ -1120,7 +1119,7 @@ namespace Demo.Scripts.Runtime
                 playerRot = transform.rotation,
                 scorePerSec = score / (roundManager.roundDuration - roundManager.roundTimer),
                 roundTimer = roundManager.roundDuration - roundManager.roundTimer,
-                enemyPos = enemy ? enemy.transform.position : Vector3.zero,
+                enemyPos = (enemy != null) ? enemy.transform.position : Vector3.zero,
                 isADS = IsAiming(),
                 frameTimeMS = deltaTime
             });
@@ -1283,7 +1282,6 @@ namespace Demo.Scripts.Runtime
             GetComponent<CharacterController>().enabled = true;
             movementComponent.enabled = true;
 
-            enemyManager.DestroyAllEnemy();
             GetGun().currentAmmoCount = GetGun().magSize;
 
             deathTimeOut = 1.5f;
@@ -1298,8 +1296,6 @@ namespace Demo.Scripts.Runtime
             this.transform.position = playerSpawnPoint.position;
             GetComponent<CharacterController>().enabled = true;
             movementComponent.enabled = true;
-
-            enemyManager.DestroyAllEnemy();
         }
 
         public void ResetRound()
